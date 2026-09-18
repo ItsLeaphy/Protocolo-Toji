@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Protocolo Toji</title>
+<meta name="theme-color" content="#F2EDE1">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Toji">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23161513'/%3E%3Ctext x='50' y='68' font-family='Arial Black, sans-serif' font-size='58' font-weight='900' fill='%23F2EDE1' text-anchor='middle'%3ET%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23161513'/%3E%3Ctext x='50' y='68' font-family='Arial Black, sans-serif' font-size='58' font-weight='900' fill='%23F2EDE1' text-anchor='middle'%3ET%3C/text%3E%3C/svg%3E">
+<link id="manifestLink" rel="manifest" href="">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Permanent+Marker&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F2EDE1;
+  --bg-alt: #EAE2CF;
+  --ink: #161513;
+  --ink-soft: #4A4740;
+  --paper-stain: #D8CFB8;
+  --accent-1: #2E9E1F;
+  --accent-1-bright: #39FF14;
+  --accent-2: #D9440F;
+  --push: #D9440F;
+  --pull: #1B4FC4;
+  --legs: #2E9E1F;
+  --line: rgba(22,21,19,0.16);
+  --line-strong: rgba(22,21,19,0.35);
+}
+
+:root[data-theme="dark"] {
+  --bg: #17140F;
+  --bg-alt: #221E17;
+  --ink: #EDE6D6;
+  --ink-soft: #A79C87;
+  --paper-stain: #2A251C;
+  --accent-1: #39FF14;
+  --accent-2: #FF6B33;
+  --push: #FF6B33;
+  --pull: #4C8CFF;
+  --legs: #39FF14;
+  --line: rgba(237,230,214,0.12);
+  --line-strong: rgba(237,230,214,0.28);
+}
+
+html { transition: background 0.25s ease; }
+body, .tab-btn, .ex-card, .skill-stamp, .hero-tape { transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease; }
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  position: relative;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 999;
+  opacity: 0.11;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
+}
+
+:root[data-theme="dark"] body::before {
+  mix-blend-mode: screen;
+  opacity: 0.06;
+}
+
+.theme-toggle {
+  position: fixed;
+  bottom: 1.4rem;
+  right: 1.4rem;
+  z-index: 1000;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 1.5px solid var(--line-strong);
+  background: var(--bg-alt);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: transform 0.15s ease, background 0.25s ease, border-color 0.25s ease;
+  box-shadow: 1px 2px 0 rgba(0,0,0,0.12);
+}
+
+.theme-toggle:hover { transform: rotate(-8deg) scale(1.05); }
+
+.theme-toggle svg {
+  width: 20px;
+  height: 20px;
+  stroke: var(--ink);
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.theme-toggle .icon-moon { display: none; }
+:root[data-theme="dark"] .theme-toggle .icon-sun { display: none; }
+:root[data-theme="dark"] .theme-toggle .icon-moon { display: block; }
+
+.wrap {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 1.5rem 6rem;
+}
+
+/* ---------- HERO ---------- */
+
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+  position: relative;
+}
+
+.hero-tape {
+  position: absolute;
+  top: 2.5rem;
+  left: 1.5rem;
+  background: rgba(217,68,15,0.85);
+  color: #fff;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  padding: 5px 12px;
+  transform: rotate(-4deg);
+  box-shadow: 1px 2px 0 rgba(0,0,0,0.15);
+}
+
+.hero-title {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: clamp(3.2rem, 13vw, 7.5rem);
+  line-height: 0.88;
+  letter-spacing: -0.01em;
+  margin: 0;
+  transform: rotate(-1.2deg);
+}
+
+.hero-title .line2 {
+  display: block;
+  margin-left: 0.4em;
+  transform: rotate(0.8deg);
+}
+
+.hero-sub {
+  font-family: 'Permanent Marker', cursive;
+  font-size: clamp(1.1rem, 3vw, 1.6rem);
+  color: var(--accent-2);
+  margin: 1.2rem 0 0 0.2em;
+  transform: rotate(-1deg);
+  position: relative;
+  display: inline-block;
+}
+
+.hero-manifesto {
+  margin-top: 2.2rem;
+  max-width: 480px;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--ink-soft);
+}
+
+.hero-manifesto strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.hero-meta {
+  margin-top: 2.5rem;
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+.hero-meta span { white-space: nowrap; }
+
+/* ---------- WEEK OVERVIEW ---------- */
+
+.section-title {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 1.8rem;
+  margin: 0 0 1rem;
+  transform: rotate(-0.4deg);
+}
+
+.week-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.2rem;
+  font-size: 14px;
+}
+
+.week-table th {
+  text-align: left;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--ink-soft);
+  font-weight: 500;
+  padding: 8px 10px;
+  border-bottom: 2px solid var(--ink);
+}
+
+.week-table td {
+  padding: 10px 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+.week-table tr:last-child td { border-bottom: none; }
+
+.day-chip {
+  display: inline-block;
+  padding: 3px 10px;
+  font-weight: 600;
+  font-size: 13px;
+  border-radius: 3px;
+}
+
+.week-note {
+  font-size: 14px;
+  color: var(--ink-soft);
+  line-height: 1.7;
+  max-width: 620px;
+}
+
+/* ---------- TABS ---------- */
+
+.tabs-nav {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 0.4rem 0 1.5rem;
+  margin-top: 2.5rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+.tab-btn {
+  flex: 0 0 auto;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 9px 14px;
+  background: transparent;
+  border: 1.5px solid var(--line-strong);
+  color: var(--ink-soft);
+  cursor: pointer;
+  border-radius: 2px;
+  transition: transform 0.12s ease;
+}
+
+.tab-btn:hover { transform: translateY(-1px); }
+
+.tab-btn.active {
+  color: #fff;
+  border-color: transparent;
+}
+
+/* ---------- DAY PANEL ---------- */
+
+.day-panel { display: none; }
+.day-panel.active { display: block; animation: none; }
+
+.panel-frame {
+  border-left: 5px solid var(--ink);
+  padding-left: 1.4rem;
+  position: relative;
+}
+
+.panel-heading {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 1.6rem;
+  margin: 0 0 0.3rem;
+}
+
+.panel-subhead {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  color: var(--ink-soft);
+  margin-bottom: 1rem;
+}
+
+.panel-intro {
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--ink-soft);
+  max-width: 560px;
+  margin: 0 0 1.6rem;
+  padding-bottom: 1.2rem;
+  border-bottom: 1px dashed var(--line-strong);
+}
+
+.block-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+  margin: 1.6rem 0 0.5rem;
+}
+
+.warmup-list {
+  font-size: 14px;
+  color: var(--ink-soft);
+  margin: 0 0 0.3rem;
+}
+
+/* skill stamp */
+.skill-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 1.2rem 0 1.6rem;
+}
+
+.skill-stamp {
+  flex: 0 0 auto;
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  border: 3px solid var(--accent-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(-5deg);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--accent-2);
+  text-align: center;
+  line-height: 1.2;
+  position: relative;
+}
+
+.skill-stamp::before {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  border: 1px solid var(--accent-2);
+  border-radius: 50%;
+  opacity: 0.55;
+}
+
+.skill-name {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.skill-desc {
+  font-size: 12px;
+  color: var(--ink-soft);
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* exercise cards */
+.ex-card {
+  border: 1.5px solid var(--line-strong);
+  border-radius: 2px;
+  margin-bottom: 8px;
+  overflow: hidden;
+  clip-path: polygon(0 2px, 1% 0, 99% 0, 100% 3px, 100% 100%, 2% 100%, 0 99%);
+}
+
+.ex-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  cursor: pointer;
+  background: var(--bg);
+  gap: 12px;
+}
+
+.ex-head:hover { background: var(--bg-alt); }
+
+.ex-name {
+  font-weight: 600;
+  font-size: 14.5px;
+}
+
+.ex-head-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 0 0 auto;
+}
+
+.ex-rir {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+.ex-toggle {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 16px;
+  width: 20px;
+  text-align: center;
+  color: var(--ink-soft);
+}
+
+.ex-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.18s ease;
+  background: var(--bg-alt);
+}
+
+.ex-card.open .ex-body { max-height: 200px; }
+
+.ex-body-inner {
+  padding: 0 14px 14px;
+  font-size: 13px;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+
+.ex-body-inner b { color: var(--ink); font-weight: 600; }
+
+.cooldown {
+  margin-top: 1.6rem;
+  font-size: 13px;
+  color: var(--ink-soft);
+  font-style: normal;
+  padding-top: 0.8rem;
+  border-top: 1px dashed var(--line-strong);
+}
+
+/* variant table for pull days */
+.variant-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  margin-top: 6px;
+}
+.variant-table td {
+  padding: 3px 8px 3px 0;
+  color: var(--ink-soft);
+}
+.variant-table td:first-child { font-weight: 600; color: var(--ink); }
+
+/* ---------- ACCORDION ---------- */
+
+.accordion-item {
+  border-bottom: 1px solid var(--line);
+}
+
+.accordion-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 4px;
+  cursor: pointer;
+}
+
+.accordion-head h3 {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 1rem;
+  margin: 0;
+  font-weight: 400;
+}
+
+.accordion-plus {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 18px;
+  color: var(--accent-2);
+}
+
+.accordion-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease;
+}
+
+.accordion-item.open .accordion-body { max-height: 600px; }
+
+.accordion-body-inner {
+  padding: 0 4px 18px;
+  font-size: 14px;
+  color: var(--ink-soft);
+  line-height: 1.75;
+}
+
+.accordion-body-inner b { color: var(--ink); font-weight: 600; }
+
+footer {
+  margin-top: 4rem;
+  padding-top: 1.5rem;
+  border-top: 2px solid var(--ink);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--ink-soft);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+@media (max-width: 600px) {
+  .hero-tape { top: 1.2rem; left: 1rem; }
+  .panel-frame { padding-left: 1rem; border-left-width: 4px; }
+  .week-table { font-size: 12.5px; }
+}
+</style>
+</head>
+<body>
+
+<button class="theme-toggle" id="themeToggle" aria-label="Alternar tema">
+  <svg class="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+  <svg class="icon-moon" viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>
+</button>
+
+<div class="wrap">
+
+  <section class="hero">
+    <span class="hero-tape" id="heroTape">SEX</span>
+    <h1 class="hero-title">PROTOCOLO<span class="line2">TOJI</span></h1>
+    <div class="hero-sub">harmonia, não hierarquia.</div>
+    <p class="hero-manifesto">
+      <strong>Referência:</strong> shape do Toji — V-shape, cintura fina, pernas grandes, braços grandes de frente e de lado, ombro definido, grip forte, corpo funcional via calistenia. Não é lista de academia. É arquitetura.
+    </p>
+    <div class="hero-meta">
+      <span>PPL · 6X/SEMANA</span>
+      <span>TETO 2H30</span>
+      <span>SKILL FRESCO, SEMPRE</span>
+    </div>
+  </section>
+
+  <section id="semana">
+    <h2 class="section-title">a semana</h2>
+    <table class="week-table">
+      <tr><th>dia</th><th>treino</th></tr>
+      <tr><td>Segunda</td><td><span class="day-chip" style="background:#F9D9CC; color:#7A2005;">Push A</span></td></tr>
+      <tr><td>Terça</td><td><span class="day-chip" style="background:#D4E0F9; color:#0E2E7A;">Pull</span></td></tr>
+      <tr><td>Quarta</td><td><span class="day-chip" style="background:#DCEFCB; color:#1C4A0B;">Legs A + Core A</span></td></tr>
+      <tr><td>Quinta</td><td><span class="day-chip" style="background:#F9D9CC; color:#7A2005;">Push B</span></td></tr>
+      <tr><td>Sexta</td><td><span class="day-chip" style="background:#DCEFCB; color:#1C4A0B;">Legs B + Core B</span></td></tr>
+      <tr><td>Sábado</td><td><span class="day-chip" style="background:#D4E0F9; color:#0E2E7A;">Pull</span> + ciclismo 32km</td></tr>
+      <tr><td>Domingo</td><td>Descanso</td></tr>
+    </table>
+    <p class="week-note">PPL entrega frequência 2x/semana por grupo, skill fresco no início de cada sessão, cabe no teto de 2h30. Push virou A/B porque 10 exercícios não cabiam num dia só. Pull repete a mesma lista terça/sábado, com variantes internas dando a diferença. Sábado é Pull, não Legs, porque o ciclismo já recruta quadríceps/glúteo.</p>
+  </section>
+
+  <nav class="tabs-nav" id="tabsNav"></nav>
+
+  <div id="panels"></div>
+
+  <section id="apendice" style="margin-top: 3rem;">
+    <h2 class="section-title">apêndice: regras e fundamentos</h2>
+    <div id="accordion"></div>
+  </section>
+
+  <footer>
+    <span>PROTOCOLO TOJI</span>
+    <span>~1,72M · ~60KG</span>
+    <span>SEM DIPS · SEM RODA ABDOMINAL</span>
+  </footer>
+
+</div>
+
+<script>
+const DAY_COLORS = {
+  push: { bg: '#D9440F', light: '#F9D9CC', text: '#7A2005' },
+  pull: { bg: '#1B4FC4', light: '#D4E0F9', text: '#0E2E7A' },
+  legs: { bg: '#2E9E1F', light: '#DCEFCB', text: '#1C4A0B' }
+};
+
+const days = [
+  {
+    id: 'seg', label: 'SEG', type: 'push',
+    title: 'Push A', subtitle: 'peito · ombro · tríceps',
+    intro: 'Push virou A/B porque os 10 exercícios de push não cabiam num dia só dentro do teto de 2h30. Esse é o dia pesado — composto principal no início, isoladores de ombro lateral com prioridade alta pro shape em V.',
+    warmup: 'rotação torácica · wall slides · band pull-apart',
+    skill: { name: 'Handstand', desc: 'PROGRESSÃO' },
+    exercises: [
+      { name: 'Supino reto (barra livre)', rir: 'RIR 2', role: 'Composto principal', detail: 'Peito médio — o motor do dia.' },
+      { name: 'Desenvolvimento (halteres)', rir: 'RIR 1-2', role: 'Composto', detail: 'Ombro.' },
+      { name: 'Supino inclinado (halteres)', rir: 'RIR 1-2', role: 'Composto', detail: 'Peito superior.' },
+      { name: 'Elevação lateral (cabo)', rir: 'RIR 0-1', role: 'Isolador', detail: 'Deltoide lateral — prioridade máxima pro shape em V.' },
+      { name: 'Tríceps francês (halter, unilateral, overhead)', rir: 'RIR 0-1', role: 'Isolador', detail: 'Tríceps cabeça longa.' }
+    ],
+    cooldown: 'Alongamento de peitoral e ombro anterior.'
+  },
+  {
+    id: 'ter', label: 'TER', type: 'pull',
+    title: 'Pull', subtitle: 'costas · bíceps · antebraço',
+    intro: 'Pull acontece 2x/semana (terça e sábado) com a mesma lista de exercícios, mas 3 deles mudam de variante entre os dois dias — outro ângulo pro mesmo grupo, sem duplicar o dia inteiro. Comparação completa terça x sábado está no apêndice, em "Variantes".',
+    warmup: 'dead hang · scapular pull-ups · shoulder dislocates · extensão torácica no banco',
+    warmupNote: 'correção postural — ombro pra frente, tensão',
+    skill: { name: 'Front lever', desc: 'PROGRESSÃO' },
+    exercises: [
+      { name: 'Barra fixa', rir: '', role: 'Composto — força/largura', detail: 'Pronada — não varia entre os dias, força ganha mais com especificidade de movimento repetido.' },
+      { name: 'Puxada aberta', rir: '', role: 'Composto — largura', detail: 'Puxador anatômico largo.' },
+      { name: 'Remada curvada', rir: '', role: 'Composto — espessura', detail: 'Pronada.' },
+      { name: 'Encolhimento', rir: '', role: 'Isolador — trapézio', detail: 'Trapézio superior — sustentação de carga e presença de ombro.' },
+      { name: 'Rosca inclinada', rir: '', role: 'Isolador — bíceps (pico)', detail: 'Banco inclinado alonga o bíceps na origem — trabalha o pico que a rosca reta não pega.' },
+      { name: 'Rosca Scott/Spider', rir: '', role: 'Isolador — bíceps (curta)', detail: 'Scott — cabeça curta do bíceps, isolada do resto do corpo pelo apoio.' },
+      { name: 'Rosca martelo', rir: '', role: 'Isolador — braquial/antebraço', detail: 'Pegada neutra — recruta braquial e braquiorradial, dá espessura de braço vista de lado.' },
+      { name: 'Rosca de punho', rir: '', role: 'Isolador — antebraço', detail: 'Antebraço e grip — parte do objetivo de pegada forte, junto com dead hangs e farmer carries.' }
+    ],
+    cooldown: 'Alongamento de dorsais · Neck curl/extension.'
+  },
+  {
+    id: 'qua', label: 'QUA', type: 'legs',
+    title: 'Legs A + Core A', subtitle: 'quadríceps · posterior · core',
+    intro: 'Perna historicamente negligenciada — esse dia existe justamente pra resolver isso, com cobertura completa de quadríceps, posterior e panturrilha, sem depender só do que o ciclismo do sábado já recruta.',
+    warmup: 'hip 90/90 · deep squat hold · ativação de glúteo',
+    skill: { name: 'Pistol squat', desc: 'PROGRESSÃO' },
+    exercises: [
+      { name: 'Agachamento livre', rir: 'RIR 2', role: 'Composto principal', detail: 'Quadríceps — motor do dia, RIR 2 porque sustenta o resto do treino.' },
+      { name: 'RDL (barra livre)', rir: 'RIR 1-2', role: 'Composto', detail: 'Posterior/lombar — resolve a lombar historicamente fraca junto com Hyperextension.' },
+      { name: 'Cadeira flexora (deitada)', rir: 'RIR 0-1', role: 'Isolador', detail: 'Posterior — isola o que o RDL não esgota sozinho.' },
+      { name: 'Cadeira extensora', rir: 'RIR 0-1', role: 'Isolador', detail: 'Quadríceps — finalização isolada, sem carga axial na coluna.' },
+      { name: 'Panturrilha em pé', rir: 'RIR 0-1', role: 'Isolador', detail: 'Gastrocnêmio — perna grande e volumosa também depende de panturrilha, não só de coxa.' }
+    ],
+    coreBlock: { label: 'Core A (academia)', items: 'Cable crunch → Prancha com sobrecarga → Pallof press → Hanging leg raise' },
+    cooldown: 'Alongamento de posterior, quadríceps e flexor de quadril (flexor curto = causa comum de anteversão pélvica e dor lombar ao andar).'
+  },
+  {
+    id: 'qui', label: 'QUI', type: 'push',
+    title: 'Push B', subtitle: 'peito · ombro posterior · tríceps',
+    intro: 'Segunda metade do push semanal — foco em ângulos que a Segunda não cobriu (peito inferior, contração) e em deltoide posterior/postura via face pull, contrabalançando o volume de peito da semana.',
+    warmup: 'rotação torácica · wall slides · band pull-apart',
+    skill: { name: 'Handstand', desc: 'PROGRESSÃO' },
+    exercises: [
+      { name: 'Supino declinado', rir: 'RIR 1-2', role: 'Composto', detail: 'Peito inferior — baixa prioridade.' },
+      { name: 'Crucifixo (cabo/peck-deck)', rir: 'RIR 0-1', role: 'Isolador', detail: 'Peito, alongamento.' },
+      { name: 'Crossover', rir: 'RIR 0-1', role: 'Isolador', detail: 'Peito, contração.' },
+      { name: 'Face pull', rir: 'RIR 1', role: 'Isolador', detail: 'Deltoide posterior/postura.' },
+      { name: 'Tríceps corda', rir: 'RIR 0-1', role: 'Isolador', detail: 'Tríceps cabeça lateral.' }
+    ],
+    cooldown: 'Alongamento de peitoral e ombro anterior.'
+  },
+  {
+    id: 'sex', label: 'SEX', type: 'legs',
+    title: 'Legs B + Core B', subtitle: 'quadríceps · glúteo · core',
+    intro: 'Segunda metade do trabalho de perna — muda o ângulo pra glúteo e unilateral (Búlgaro), e fecha a semana de perna sem repetir os mesmos estímulos de quarta.',
+    warmup: 'hip 90/90 · deep squat hold · ativação de glúteo',
+    skill: { name: 'Agilidade', desc: 'SALTOS LATERAIS' },
+    exercises: [
+      { name: 'Leg press (pé baixo/médio)', rir: 'RIR 1-2', role: 'Composto', detail: 'Quadríceps.' },
+      { name: 'Hip thrust (barra livre)', rir: 'RIR 1-2', role: 'Composto', detail: 'Glúteo.' },
+      { name: 'Cadeira abdutora', rir: 'RIR 0-1', role: 'Isolador', detail: 'Estabilidade de quadril.' },
+      { name: 'Búlgaro (halteres)', rir: 'RIR 1-2', role: 'Unilateral', detail: 'Controle/agilidade.' },
+      { name: 'Hyperextension (banco 45°)', rir: 'RIR 0-1', role: 'Isolador', detail: 'Lombar, ângulo seguro.' },
+      { name: 'Panturrilha sentado', rir: 'RIR 0-1', role: 'Isolador', detail: 'Sóleo.' }
+    ],
+    coreBlock: { label: 'Core B (calistenia)', items: 'Crucifix crunch → Dragon flag progressão → Shoulder taps em prancha → Hanging leg raise' },
+    cooldown: 'Alongamento de posterior, quadríceps e flexor de quadril.'
+  },
+  {
+    id: 'sab', label: 'SÁB', type: 'pull',
+    title: 'Pull (repete terça)', subtitle: '+ ciclismo 32km',
+    intro: 'Mesma lista de exercícios da terça, mas 3 deles mudam de variante (ver "Variantes" no apêndice) — segundo estímulo de ângulo pro mesmo grupo, sem duplicar o dia. Pull e não Legs porque o ciclismo já recruta quadríceps e glúteo.',
+    warmup: 'dead hang · scapular pull-ups · shoulder dislocates · extensão torácica no banco',
+    skill: { name: 'Front lever', desc: 'PROGRESSÃO' },
+    exercises: [
+      { name: 'Barra fixa', rir: '', role: 'Composto — força/largura', detail: 'Pronada — não varia entre os dias, força ganha mais com especificidade de movimento repetido.' },
+      { name: 'Puxada aberta', rir: '', role: 'Composto — largura', detail: 'Triângulo/neutro — ângulo diferente da terça pro mesmo grupo.' },
+      { name: 'Remada curvada', rir: '', role: 'Composto — espessura', detail: 'Supinada — recruta mais bíceps junto, complementa a pronada de terça.' },
+      { name: 'Encolhimento', rir: '', role: 'Isolador — trapézio', detail: 'Trapézio superior — sustentação de carga e presença de ombro.' },
+      { name: 'Rosca inclinada', rir: '', role: 'Isolador — bíceps (pico)', detail: 'Banco inclinado alonga o bíceps na origem — trabalha o pico.' },
+      { name: 'Rosca Scott/Spider', rir: '', role: 'Isolador — bíceps (curta)', detail: 'Spider curl — mesma função da terça, ângulo levemente diferente.' },
+      { name: 'Rosca martelo', rir: '', role: 'Isolador — braquial/antebraço', detail: 'Pegada neutra — braquial e braquiorradial, espessura de braço vista de lado.' },
+      { name: 'Rosca de punho', rir: '', role: 'Isolador — antebraço', detail: 'Antebraço e grip.' }
+    ],
+    cooldown: 'Alongamento de dorsais · Neck curl/extension. Ciclismo 32km recruta quadríceps/glúteo — por isso o dia não é Legs.'
+  },
+  {
+    id: 'dom', label: 'DOM', type: 'rest',
+    title: 'Descanso', subtitle: '',
+    intro: 'Recuperação é parte do sistema, não um vazio entre treinos — é aqui que o corpo consolida o estímulo da semana.',
+    rest: true
+  }
+];
+
+const accordionData = [
+  {
+    title: 'Variantes',
+    body: 'Só varia com justificativa real de função — senão repete igual. Puxada aberta, Remada curvada e Rosca Scott/Spider variam porque Pull acontece 2x/semana e cada ângulo pega uma área diferente. <b>Barra fixa não varia</b> — força ganha mais com especificidade de movimento repetido. T-bar foi avaliado e descartado (tipo livre, redundante com Remada curvada).<br><br><table class="variant-table"><tr><td style="color:var(--ink-soft); font-weight:400;">exercício</td><td style="color:var(--ink-soft); font-weight:400;">terça</td><td style="color:var(--ink-soft); font-weight:400;">sábado</td></tr><tr><td>Barra fixa</td><td>Pronada</td><td>Pronada (sem variar)</td></tr><tr><td>Puxada aberta</td><td>Puxador largo</td><td>Triângulo/neutro</td></tr><tr><td>Remada curvada</td><td>Pronada</td><td>Supinada</td></tr><tr><td>Rosca Scott/Spider</td><td>Scott</td><td>Spider curl</td></tr></table>'
+  },
+  {
+    title: 'Execução e progressão',
+    body: '<b>Estrutura:</b> 4x8, progressão dupla — não bate 8 em tudo, segura peso; bate 8 em tudo, sobe peso; passa de 8, sobe peso.<br><br><b>Calibração de peso pelo papel:</b> composto principal deixa RIR 2 na 8ª rep · compostos secundários RIR 1-2 · isoladores RIR 0-1.<br><br>Skill fica fora do 4x8 — métrica é tempo de hold ou reps limpas, nunca até o limite.<br><br><b>Platô de 3+ semanas</b> = trocar variante, não forçar.'
+  },
+  {
+    title: 'Postura e respiração',
+    body: 'Ombros pra frente/tensão → Face pull + band pull-apart.<br>Caixa torácica pra frente → Core (bracing) + extensão torácica.<br>Dor lombar ao andar / cintura pra trás na marcha → Hip thrust + RDL + Hyperextension + alongamento de flexor de quadril.<br><br><b>Respiração 360°</b> (2-3 min diários, deitado, costela expandindo pros lados) reforça o mesmo trabalho, independente do treino.'
+  },
+  {
+    title: 'Sobre a cintura',
+    body: 'Não se treina, se revela — largura de costas + baixo percentual de gordura. Core usa <b>anti-rotação</b> (Pallof press / shoulder taps) em vez de rotação carregada, que engrossaria a cintura.'
+  },
+  {
+    title: 'Restrições e dados de partida',
+    body: 'Sem Dips e sem roda abdominal na academia (Dragon flag substitui). Teto de 2h30, tolerância pra exceder ocasionalmente. Sem depender de suplementação pesada.<br><br>Altura ~1,72m, peso ~60kg. Lombar historicamente fraca (resolvido com RDL+Hyperextension); perna historicamente negligenciada (resolvido com cobertura completa).'
+  }
+];
+
+function buildTabs() {
+  const nav = document.getElementById('tabsNav');
+  days.forEach((d, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'tab-btn' + (i === 0 ? ' active' : '');
+    btn.textContent = d.label;
+    btn.dataset.id = d.id;
+    if (i === 0) applyActiveStyle(btn, d.type);
+    btn.addEventListener('click', () => selectDay(d.id));
+    nav.appendChild(btn);
+  });
+}
+
+function applyActiveStyle(btn, type) {
+  const c = DAY_COLORS[type];
+  if (c) {
+    btn.style.background = c.bg;
+    btn.style.borderColor = c.bg;
+    btn.style.color = '#fff';
+  } else {
+    btn.style.background = 'var(--ink)';
+    btn.style.borderColor = 'var(--ink)';
+    btn.style.color = '#fff';
+  }
+}
+
+function clearActiveStyle(btn) {
+  btn.style.background = 'transparent';
+  btn.style.borderColor = '';
+  btn.style.color = '';
+}
+
+function selectDay(id) {
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    const day = days.find(d => d.id === btn.dataset.id);
+    if (btn.dataset.id === id) {
+      btn.classList.add('active');
+      applyActiveStyle(btn, day.type);
+    } else {
+      btn.classList.remove('active');
+      clearActiveStyle(btn);
+    }
+  });
+  document.querySelectorAll('.day-panel').forEach(p => {
+    p.classList.toggle('active', p.dataset.id === id);
+  });
+}
+
+function buildPanels() {
+  const container = document.getElementById('panels');
+  days.forEach((d, i) => {
+    const panel = document.createElement('div');
+    panel.className = 'day-panel' + (i === 0 ? ' active' : '');
+    panel.dataset.id = d.id;
+
+    if (d.rest) {
+      panel.innerHTML = `
+        <div class="panel-frame" style="border-color: var(--line-strong);">
+          <h2 class="panel-heading">Descanso</h2>
+          <p class="panel-subhead">recuperação é parte do treino, não ausência dele.</p>
+          ${d.intro ? `<p class="panel-intro">${d.intro}</p>` : ''}
+        </div>`;
+      container.appendChild(panel);
+      return;
+    }
+
+    const c = DAY_COLORS[d.type];
+    let html = `<div class="panel-frame" style="border-color: ${c.bg};">`;
+    html += `<h2 class="panel-heading">${d.title}</h2>`;
+    html += `<p class="panel-subhead">${d.subtitle}</p>`;
+    if (d.intro) html += `<p class="panel-intro">${d.intro}</p>`;
+
+    html += `<div class="block-label">aquecimento</div>`;
+    html += `<p class="warmup-list">${d.warmup}${d.warmupNote ? ' — <em>' + d.warmupNote + '</em>' : ''}</p>`;
+
+    if (d.skill) {
+      html += `<div class="skill-row">
+        <div class="skill-stamp" style="border-color:${c.bg}; color:${c.bg};">${d.skill.desc}</div>
+        <div><div class="skill-name">${d.skill.name}</div><div class="skill-desc">SKILL · FRESCO</div></div>
+      </div>`;
+    }
+
+    html += `<div class="block-label">exercícios</div>`;
+    d.exercises.forEach((ex, idx) => {
+      html += `<div class="ex-card" data-idx="${idx}">
+        <div class="ex-head">
+          <div class="ex-name">${ex.name}</div>
+          <div class="ex-head-right">
+            ${ex.rir ? `<span class="ex-rir">${ex.rir}</span>` : ''}
+            <span class="ex-toggle">+</span>
+          </div>
+        </div>
+        <div class="ex-body"><div class="ex-body-inner"><b>${ex.role}</b>${ex.detail ? ' — ' + ex.detail : ''}</div></div>
+      </div>`;
+    });
+
+    if (d.coreBlock) {
+      html += `<div class="block-label">${d.coreBlock.label}</div>`;
+      html += `<p class="warmup-list">${d.coreBlock.items}</p>`;
+    }
+
+    html += `<div class="cooldown">${d.cooldown}</div>`;
+    html += `</div>`;
+
+    panel.innerHTML = html;
+    container.appendChild(panel);
+  });
+
+  document.querySelectorAll('.ex-card').forEach(card => {
+    card.querySelector('.ex-head').addEventListener('click', () => {
+      const isOpen = card.classList.contains('open');
+      card.classList.toggle('open', !isOpen);
+      card.querySelector('.ex-toggle').textContent = isOpen ? '+' : '×';
+    });
+  });
+}
+
+function buildAccordion() {
+  const container = document.getElementById('accordion');
+  accordionData.forEach((item, i) => {
+    const el = document.createElement('div');
+    el.className = 'accordion-item';
+    el.innerHTML = `
+      <div class="accordion-head">
+        <h3>${item.title}</h3>
+        <span class="accordion-plus">+</span>
+      </div>
+      <div class="accordion-body"><div class="accordion-body-inner">${item.body}</div></div>`;
+    el.querySelector('.accordion-head').addEventListener('click', () => {
+      const isOpen = el.classList.contains('open');
+      el.classList.toggle('open', !isOpen);
+      el.querySelector('.accordion-plus').textContent = isOpen ? '+' : '×';
+    });
+    container.appendChild(el);
+  });
+}
+
+function initPWA() {
+  const manifest = {
+    name: 'Protocolo Toji',
+    short_name: 'Toji',
+    description: 'Harmonia, não hierarquia — rotina de treino PPL.',
+    start_url: '.',
+    display: 'standalone',
+    background_color: '#F2EDE1',
+    theme_color: '#F2EDE1',
+    orientation: 'portrait-primary',
+    icons: [
+      {
+        src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' fill='%23161513'/%3E%3Ctext x='96' y='132' font-family='Arial Black, sans-serif' font-size='110' font-weight='900' fill='%23F2EDE1' text-anchor='middle'%3ET%3C/text%3E%3C/svg%3E",
+        sizes: '192x192',
+        type: 'image/svg+xml'
+      },
+      {
+        src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%23161513'/%3E%3Ctext x='256' y='352' font-family='Arial Black, sans-serif' font-size='300' font-weight='900' fill='%23F2EDE1' text-anchor='middle'%3ET%3C/text%3E%3C/svg%3E",
+        sizes: '512x512',
+        type: 'image/svg+xml'
+      }
+    ]
+  };
+  const blob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
+  document.getElementById('manifestLink').setAttribute('href', URL.createObjectURL(blob));
+
+  // Service worker mínimo (cache-first do próprio documento), registrado só quando
+  // o arquivo estiver hospedado num domínio real com HTTPS — falha silenciosamente
+  // em ambientes sandboxed (ex.: preview do Claude), o que é esperado.
+  if ('serviceWorker' in navigator) {
+    const swCode = `
+      self.addEventListener('install', e => self.skipWaiting());
+      self.addEventListener('activate', e => self.clients.claim());
+      self.addEventListener('fetch', e => {
+        e.respondWith(
+          caches.open('toji-v1').then(cache =>
+            fetch(e.request).then(res => {
+              cache.put(e.request, res.clone());
+              return res;
+            }).catch(() => cache.match(e.request))
+          )
+        );
+      });
+    `;
+    const swBlob = new Blob([swCode], { type: 'application/javascript' });
+    navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(() => {});
+  }
+}
+
+function initTheme() {
+  const saved = localStorage.getItem('toji-theme');
+  const theme = saved || 'light';
+  document.documentElement.setAttribute('data-theme', theme);
+  document.getElementById('themeToggle').addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('toji-theme', next);
+  });
+}
+
+const WEEKDAY_TO_ID = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sab'];
+const WEEKDAY_LABEL = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SÁB'];
+
+function initTodayTape() {
+  const now = new Date();
+  const dow = now.getDay();
+  document.getElementById('heroTape').textContent = WEEKDAY_LABEL[dow];
+  return WEEKDAY_TO_ID[dow];
+}
+
+initPWA();
+initTheme();
+buildTabs();
+buildPanels();
+buildAccordion();
+
+const todayId = initTodayTape();
+if (days.find(d => d.id === todayId)) selectDay(todayId);
+</script>
+
+</body>
+</html>
