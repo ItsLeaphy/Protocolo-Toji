@@ -3,34 +3,39 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>MAKI — sem dom, só treino</title>
-<meta name="theme-color" content="#1A0A0E">
+<title>MAKI</title>
+<meta name="theme-color" content="#EFE3DC">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Maki">
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%231A0A0E'/%3E%3Ctext x='50' y='70' font-family='Georgia, serif' font-size='60' font-weight='900' fill='%23E8194F' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%231A0A0E'/%3E%3Ctext x='50' y='70' font-family='Georgia, serif' font-size='60' font-weight='900' fill='%23E8194F' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%233B2A2E'/%3E%3Ctext x='50' y='68' font-family='Georgia, serif' font-size='52' fill='%23EFE3DC' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%233B2A2E'/%3E%3Ctext x='50' y='68' font-family='Georgia, serif' font-size='52' fill='%23EFE3DC' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E">
 <link id="manifestLink" rel="manifest" href="">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,900&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #1A0A0E;
-  --bg-alt: #241016;
-  --panel: #2B141B;
-  --ink: #F2E4E0;
-  --ink-dim: #B49098;
-  --muted: #7A5C63;
-  --accent: #E8194F;
-  --accent-dim: #A3123A;
-  --gold: #C9A66B;
-  --paper: #F2E4E0;
-  --line: rgba(242,228,224,0.1);
-  --line-strong: rgba(242,228,224,0.22);
-  --legs-c: #E8194F;
-  --upper-c: #C9A66B;
+  --bg: #EFE3DC;
+  --bg-card: #F7EFE9;
+  --bg-deep: #E4D3C8;
+  --ink: #3B2A2E;
+  --ink-soft: #8A6F6A;
+  --ink-faint: #B7A199;
+  --rose: #C97B6B;
+  --rose-deep: #A85D52;
+  --clay: #B98868;
+  --sage: #8E9B7E;
+  --sage-deep: #5E6B4F;
+  --mustard: #D4A24C;
+  --mustard-deep: #A87824;
+  --wine: #7A3B3F;
+  --cream: #FBF6F0;
+  --line: rgba(59,42,46,0.13);
+  --line-strong: rgba(59,42,46,0.24);
+  --legs-c: #C97B6B;
+  --upper-c: #8E9B7E;
 }
 
 * { box-sizing: border-box; }
@@ -51,485 +56,635 @@ body { position: relative; }
 .serif { font-family: 'Fraunces', serif; }
 .mono { font-family: 'IBM Plex Mono', monospace; }
 
-/* grain + torn-paper feel */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 998;
-  pointer-events: none;
-  opacity: 0.08;
-  mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-
-body::after {
-  content: "";
+/* ---- organic backdrop: ink blobs, painted loosely, never randomly ---- */
+.blob-field {
   position: fixed;
   inset: 0;
   z-index: -1;
-  background:
-    radial-gradient(ellipse 700px 900px at -10% 0%, rgba(232,25,79,0.14), transparent 60%),
-    radial-gradient(ellipse 600px 700px at 110% 30%, rgba(201,166,107,0.08), transparent 55%),
-    radial-gradient(ellipse 900px 600px at 50% 110%, rgba(163,18,58,0.16), transparent 60%),
-    var(--bg);
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.blob-field svg { position: absolute; }
+
+/* ---- signature circle, used as a recurring motif ---- */
+.ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+  opacity: 0.35;
+}
+
+.dot {
+  position: absolute;
+  border-radius: 50%;
 }
 
 .wrap {
-  max-width: 900px;
+  max-width: 1080px;
   width: 100%;
   margin: 0 auto;
-  padding: 0 1.3rem 6rem;
+  padding: 0 1.4rem 7rem;
   overflow-x: hidden;
 }
 
-/* torn-edge card, reused throughout */
-.torn {
-  clip-path: polygon(
-    0% 2%, 3% 0%, 12% 1%, 22% 0%, 34% 1.5%, 47% 0%, 58% 1%, 71% 0%, 83% 1.5%, 100% 0%,
-    100% 96%, 96% 100%, 87% 98.5%, 74% 100%, 61% 99%, 49% 100%, 36% 98.5%, 24% 100%, 11% 99%, 0% 100%
-  );
-}
+/* ================= MASTHEAD ================= */
 
-/* ---------- HERO ---------- */
-
-.hero {
-  min-height: 92vh;
+.masthead {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 3rem 0.4rem;
-  position: relative;
-}
-
-.hero-stamp {
-  display: inline-flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 8px;
+  padding: 1.6rem 0.2rem 1rem;
+  border-bottom: 1px solid var(--line-strong);
   font-family: 'IBM Plex Mono', monospace;
   font-size: 10.5px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 1.6rem;
-  transform: rotate(-1.5deg);
+  color: var(--ink-soft);
 }
 
-.hero-stamp::before {
-  content: '✕';
-  color: var(--accent);
-  font-size: 13px;
+.masthead .issue { color: var(--rose-deep); font-weight: 500; }
+
+.editorial-letter {
+  padding: 2.2rem 0.2rem 1.6rem;
+  max-width: 460px;
+}
+
+.editorial-letter .sig-kicker {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 0.9rem;
+}
+
+.editorial-letter p {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  margin: 0;
+}
+
+.editorial-letter .sig {
+  margin-top: 1rem;
+  font-family: 'Fraunces', serif;
+  font-style: normal;
+  font-size: 0.95rem;
+  color: var(--ink);
+}
+
+/* ================= HERO — editorial spread ================= */
+
+.hero {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 2.5rem;
+  align-items: end;
+  padding: 3.4rem 2.2rem 4.2rem;
+  border: 1px solid var(--line-strong);
+  position: relative;
+  margin-top: 1.6rem;
+}
+
+.hero::before, .hero::after,
+.hero-corner-tl, .hero-corner-br { content: ''; }
+
+.frame-corner {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border-color: var(--rose-deep);
+  opacity: 0.55;
+}
+.frame-corner.tl { top: -1px; left: -1px; border-top: 2px solid; border-left: 2px solid; }
+.frame-corner.br { bottom: -1px; right: -1px; border-bottom: 2px solid; border-right: 2px solid; }
+
+.hero-ring {
+  position: absolute;
+  top: 2.4rem;
+  right: 2.2rem;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 1.5px solid var(--mustard-deep);
+  opacity: 0.5;
+}
+.hero-ring::before {
+  content: '';
+  position: absolute;
+  inset: 12px;
+  border-radius: 50%;
+  border: 1px solid var(--rose-deep);
+  opacity: 0.7;
+}
+
+.hero-left { grid-column: 1; }
+
+.hero-kicker {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--rose-deep);
+  margin-bottom: 1.4rem;
 }
 
 .hero-title {
   font-family: 'Fraunces', serif;
-  font-weight: 900;
-  font-optical-sizing: auto;
-  font-size: clamp(3rem, 13vw, 6.5rem);
-  line-height: 0.82;
+  font-weight: 500;
+  font-size: clamp(3.4rem, 9vw, 6.8rem);
+  line-height: 0.86;
   margin: 0;
-  letter-spacing: -0.02em;
-  max-width: 100%;
-  overflow-wrap: break-word;
+  letter-spacing: -0.015em;
   color: var(--ink);
-  text-transform: uppercase;
-  transform: rotate(-0.8deg);
 }
 
-.hero-title .strike {
-  position: relative;
-  color: var(--muted);
-  font-weight: 600;
-  font-size: 0.42em;
-  display: block;
-  text-transform: none;
-  letter-spacing: 0;
-  margin-bottom: 0.15em;
-  transform: rotate(1.5deg);
-}
+.hero-title .it { font-style: italic; font-weight: 400; color: var(--rose-deep); }
 
-.hero-title .strike::after {
-  content: '';
-  position: absolute;
-  left: -2%;
-  right: -2%;
-  top: 52%;
-  height: 3px;
-  background: var(--accent);
-  transform: rotate(-2deg);
+.hero-right {
+  grid-column: 2;
+  border-left: 1px solid var(--line-strong);
+  padding-left: 2rem;
 }
-
-.hero-title .real {
-  display: block;
-  color: var(--accent);
-  transform: rotate(0.6deg) translateX(0.15em);
-}
-
-.hero-sub {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: clamp(0.82rem, 2.1vw, 0.95rem);
-  color: var(--gold);
-  margin-top: 1.3rem;
-  letter-spacing: 0.02em;
-  transform: rotate(-0.4deg);
-}
-
-.hero-sub::before { content: '// '; color: var(--muted); }
 
 .hero-manifesto {
-  margin-top: 1.5rem;
-  max-width: 500px;
-  font-size: 14.5px;
-  line-height: 1.75;
-  color: var(--ink-dim);
-}
-
-.hero-manifesto strong { color: var(--ink); font-weight: 700; }
-
-.hero-meta {
-  margin-top: 2.2rem;
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.hero-meta span {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10.5px;
-  padding: 5px 11px;
-  background: var(--panel);
-  border: 1px solid var(--line-strong);
-  color: var(--ink-dim);
-  transform: rotate(-1deg);
-}
-.hero-meta span:nth-child(2n) { transform: rotate(0.8deg); }
-.hero-meta span:nth-child(3n) { transform: rotate(-0.4deg); }
-
-/* ---------- WEEK ---------- */
-
-.section-title {
   font-family: 'Fraunces', serif;
-  font-weight: 800;
-  font-size: 1.6rem;
-  margin: 0 0 1rem;
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.1rem, 2.4vw, 1.4rem);
+  line-height: 1.5;
   color: var(--ink);
-  transform: rotate(-0.5deg);
-  display: inline-block;
 }
 
-.week-card {
-  background: var(--panel);
+.hero-manifesto b { font-style: normal; font-weight: 600; color: var(--rose-deep); }
+
+.hero-meta-row {
+  margin-top: 4rem;
+  padding: 0 0.2rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--line-strong);
   border: 1px solid var(--line-strong);
-  overflow: hidden;
-  margin-bottom: 1.2rem;
 }
 
-.week-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.hero-meta-cell {
+  background: var(--bg);
+  padding: 1.1rem 1.2rem;
+}
 
-.week-table th {
-  text-align: left;
+.hero-meta-cell .num { font-family: 'Fraunces', serif; font-size: 1.9rem; color: var(--rose-deep); line-height: 1; }
+.hero-meta-cell .lbl { font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-soft); margin-top: 0.4rem; }
+
+/* ================= SECTION LABEL ================= */
+
+.section-label {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin: 4.5rem 0.2rem 1.6rem;
+}
+
+.section-label .n { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--rose-deep); }
+.section-label h2 { font-family: 'Fraunces', serif; font-weight: 500; font-size: 1.7rem; margin: 0; }
+.section-label .rule { flex: 1; height: 1px; background: var(--line-strong); }
+
+/* ================= WEEK — editorial index ================= */
+
+.week-index { padding: 0 0.2rem; }
+
+.week-row {
+  display: grid;
+  grid-template-columns: 60px 1fr auto;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 1.05rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.week-row .day-num { font-family: 'Fraunces', serif; font-size: 1.5rem; color: var(--ink-faint); }
+.week-row .day-name { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-soft); }
+.week-row .day-title { font-family: 'Fraunces', serif; font-size: 1.15rem; color: var(--ink); margin-top: 2px; }
+
+.week-tag {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 10px;
-  color: var(--muted);
+  padding: 4px 12px;
+  border-radius: 100px;
+  white-space: nowrap;
   font-weight: 500;
-  padding: 10px 14px;
-  border-bottom: 2px solid var(--accent);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
 }
 
-.week-table td { padding: 11px 14px; border-bottom: 1px solid var(--line); color: var(--ink-dim); }
-.week-table tr:last-child td { border-bottom: none; }
-
-.day-chip {
-  display: inline-block;
-  padding: 3px 11px;
-  font-weight: 700;
-  font-size: 12px;
-  font-family: 'IBM Plex Mono', monospace;
+.week-note {
+  margin-top: 1.6rem;
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--ink-soft);
+  max-width: 640px;
 }
 
-.week-note { font-size: 13.5px; color: var(--ink-dim); line-height: 1.75; max-width: 640px; }
-
-/* ---------- TABS ---------- */
+/* ================= TABS — as a folio strip ================= */
 
 .tabs-nav {
   display: flex;
-  gap: 7px;
+  gap: 0;
   overflow-x: auto;
-  padding: 0.4rem 0 1.5rem;
-  margin-top: 2.6rem;
+  margin: 0 0.2rem;
   -webkit-overflow-scrolling: touch;
+  border-top: 1px solid var(--line-strong);
+  border-bottom: 1px solid var(--line-strong);
 }
 
 .tab-btn {
-  flex: 0 0 auto;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 12px;
-  font-weight: 600;
-  padding: 9px 15px;
-  background: var(--panel);
-  border: 1.5px solid var(--line-strong);
-  color: var(--ink-dim);
-  cursor: pointer;
-  transition: transform 0.12s ease;
-}
-
-.tab-btn:nth-child(odd) { transform: rotate(-0.8deg); }
-.tab-btn:nth-child(even) { transform: rotate(0.6deg); }
-.tab-btn:hover { transform: translateY(-2px); }
-
-.tab-btn.active { color: var(--bg); border-color: transparent; font-weight: 700; }
-
-/* ---------- PANEL ---------- */
-
-.day-panel { display: none; }
-.day-panel.active { display: block; }
-
-.panel-frame {
-  background: var(--panel);
-  border: 1px solid var(--line-strong);
-  border-left: 5px solid var(--accent);
-  padding: 1.7rem 1.4rem;
-  position: relative;
-}
-
-.panel-heading {
-  font-family: 'Fraunces', serif;
-  font-weight: 800;
-  font-size: 1.7rem;
-  margin: 0 0 0.2rem;
-  color: var(--ink);
-  text-transform: uppercase;
-}
-
-.panel-subhead {
+  flex: 1 0 auto;
   font-family: 'IBM Plex Mono', monospace;
   font-size: 11px;
-  color: var(--muted);
-  margin-bottom: 1.1rem;
-}
-
-.panel-intro {
-  font-size: 13.5px;
-  line-height: 1.7;
-  color: var(--ink-dim);
-  max-width: 600px;
-  margin: 0 0 1.5rem;
-  padding: 0.9rem 1.1rem;
-  background: var(--bg-alt);
-  border-left: 2px solid var(--gold);
-}
-
-.block-label {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10.5px;
   letter-spacing: 0.05em;
-  color: var(--gold);
+  font-weight: 500;
+  padding: 14px 18px;
+  background: transparent;
+  border: none;
+  border-right: 1px solid var(--line);
+  color: var(--ink-faint);
+  cursor: pointer;
   text-transform: uppercase;
-  margin: 1.6rem 0 0.6rem;
+  transition: background 0.15s ease, color 0.15s ease;
 }
 
-.warmup-list { font-size: 13.5px; color: var(--ink-dim); margin: 0 0 0.3rem; }
+.tab-btn:last-child { border-right: none; }
+.tab-btn:hover { background: var(--bg-card); color: var(--ink); }
+.tab-btn.active { background: var(--ink); color: var(--bg); }
 
-.skill-row {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  margin: 1.2rem 0 1.6rem;
+/* ================= DAY PANEL — asymmetric spread ================= */
+
+.day-panel { display: none; padding-top: 2.6rem; }
+.day-panel.active { display: block; }
+
+.panel-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: 2.6rem;
+  border: 1px solid var(--line-strong);
+  padding: 2.4rem 2rem;
+  position: relative;
+  background: var(--cream);
 }
 
-.skill-stamp {
-  flex: 0 0 auto;
-  width: 58px;
-  height: 58px;
-  border: 2px solid var(--accent);
-  transform: rotate(-6deg);
+.panel-grid .frame-corner.tl,
+.panel-grid .frame-corner.br { border-color: var(--sage-deep); }
+
+.panel-seal {
+  position: absolute;
+  top: -22px;
+  left: 2rem;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 1.5px solid var(--ink);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 8.5px;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  color: var(--accent);
-  text-align: center;
-  line-height: 1.15;
-  position: relative;
+  font-family: 'Fraunces', serif;
+  font-size: 1rem;
+  color: var(--ink);
 }
 
-.skill-stamp::before {
-  content: "";
+.today-mark {
   position: absolute;
-  inset: 4px;
-  border: 1px dashed var(--gold);
-  opacity: 0.6;
-}
-
-.skill-name { font-weight: 700; font-size: 14.5px; font-family: 'Fraunces', serif; color: var(--ink); }
-.skill-desc { font-size: 10.5px; color: var(--muted); font-family: 'IBM Plex Mono', monospace; text-transform: uppercase; }
-
-.ex-card {
-  border: 1px solid var(--line);
-  margin-bottom: 8px;
-  overflow: hidden;
-  background: var(--bg-alt);
-}
-
-.ex-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 14px;
-  cursor: pointer;
-  gap: 12px;
-}
-
-.ex-head:hover { background: rgba(232,25,79,0.06); }
-
-.ex-name { font-weight: 600; font-size: 14.5px; color: var(--ink); }
-
-.ex-head-right { display: flex; align-items: center; gap: 10px; flex: 0 0 auto; }
-
-.ex-rir {
+  top: -14px;
+  right: 2rem;
   font-family: 'IBM Plex Mono', monospace;
-  font-size: 10.5px;
-  color: var(--bg);
-  background: var(--accent);
+  font-size: 9.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: var(--ink);
+  color: var(--cream);
+  padding: 5px 12px;
+  border-radius: 100px;
+}
+
+.page-num {
+  position: absolute;
+  bottom: -12px;
+  right: 2rem;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--ink-faint);
+  background: var(--bg);
   padding: 2px 8px;
-  white-space: nowrap;
-  font-weight: 700;
 }
 
-.ex-toggle { font-family: 'Fraunces', serif; font-size: 19px; width: 18px; text-align: center; color: var(--muted); }
-
-.ex-body { max-height: 0; overflow: hidden; transition: max-height 0.18s ease; background: var(--bg); }
-.ex-card.open .ex-body { max-height: 200px; }
-
-.ex-body-inner { padding: 0 14px 14px; font-size: 13px; color: var(--ink-dim); line-height: 1.6; }
-.ex-body-inner b { color: var(--gold); font-weight: 700; }
-
-.cooldown {
-  margin-top: 1.6rem;
-  font-size: 13px;
-  color: var(--ink-dim);
-  padding-top: 0.9rem;
-  border-top: 1px dashed var(--line-strong);
+.panel-side {
+  border-right: 1px solid var(--line-strong);
+  padding-right: 2.2rem;
 }
 
-/* ---------- ACCORDION ---------- */
+.panel-eyebrow { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--rose-deep); margin-bottom: 0.8rem; }
 
-.accordion-item { border-bottom: 1px solid var(--line); }
+.panel-heading {
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  font-size: 2.4rem;
+  line-height: 1.02;
+  margin: 0 0 0.6rem;
+}
 
-.accordion-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 17px 4px;
+.panel-subhead { font-family: 'Fraunces', serif; font-style: italic; font-size: 1rem; color: var(--ink-soft); margin-bottom: 1.6rem; }
+
+.panel-intro {
+  font-size: 13.5px;
+  line-height: 1.75;
+  color: var(--ink-soft);
+}
+
+.side-block { margin-top: 1.8rem; }
+.side-block .label { font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 0.5rem; }
+.side-block .val { font-size: 13px; color: var(--ink); line-height: 1.6; }
+
+.skill-plate {
+  margin-top: 1.8rem;
+  padding: 1.1rem 1.2rem;
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+}
+
+.skill-plate .label { font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--rose-deep); margin-bottom: 0.5rem; }
+.skill-plate .name { font-family: 'Fraunces', serif; font-size: 1.2rem; }
+.skill-plate .stage { font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: var(--ink-soft); margin-top: 3px; }
+
+/* exercises — as a numbered editorial list, not chat cards */
+
+.ex-list { border-top: 1px solid var(--line-strong); }
+
+.ex-row {
+  border-bottom: 1px solid var(--line);
   cursor: pointer;
 }
 
-.accordion-head h3 { font-family: 'Fraunces', serif; font-size: 1.05rem; margin: 0; font-weight: 700; color: var(--ink); }
+.ex-row-head {
+  display: grid;
+  grid-template-columns: 32px 1fr auto auto;
+  align-items: center;
+  gap: 14px;
+  padding: 15px 4px;
+}
 
-.accordion-plus { font-family: 'Fraunces', serif; font-size: 20px; color: var(--accent); }
+.ex-row-head .idx { font-family: 'Fraunces', serif; font-size: 1.1rem; color: var(--ink-faint); }
+.ex-row-head .name { font-size: 14.5px; font-weight: 500; }
+.ex-row-head .rir { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--rose-deep); white-space: nowrap; }
+.ex-row-head .plus { font-family: 'Fraunces', serif; font-size: 18px; color: var(--ink-faint); width: 16px; text-align: center; }
 
-.accordion-body { max-height: 0; overflow: hidden; transition: max-height 0.2s ease; }
-.accordion-item.open .accordion-body { max-height: 600px; }
+.ex-row-body { max-height: 0; overflow: hidden; transition: max-height 0.2s ease; }
+.ex-row.open .ex-row-body { max-height: 160px; }
 
-.accordion-body-inner { padding: 0 4px 19px; font-size: 14px; color: var(--ink-dim); line-height: 1.78; }
-.accordion-body-inner b { color: var(--ink); font-weight: 700; }
+.ex-row-body-inner {
+  padding: 0 4px 16px 46px;
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  line-height: 1.6;
+  max-width: 480px;
+}
 
-footer {
-  margin-top: 4rem;
-  padding-top: 1.5rem;
-  border-top: 2px solid var(--accent-dim);
+.ex-row-body-inner b { color: var(--rose-deep); font-weight: 600; }
+
+.cooldown-line {
+  margin-top: 1.6rem;
+  padding-top: 1rem;
+  border-top: 1px dashed var(--line-strong);
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  font-style: italic;
+  font-family: 'Fraunces', serif;
+}
+
+/* ================= APPENDIX — magazine footnotes ================= */
+
+.appendix-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border-top: 1px solid var(--line-strong); border-left: 1px solid var(--line-strong); }
+
+.appendix-cell {
+  border-right: 1px solid var(--line-strong);
+  border-bottom: 1px solid var(--line-strong);
+  padding: 1.8rem 1.8rem;
+  cursor: pointer;
+}
+
+.appendix-cell .num { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--rose-deep); margin-bottom: 0.6rem; }
+.appendix-cell h3 { font-family: 'Fraunces', serif; font-weight: 500; font-size: 1.25rem; margin: 0 0 0.7rem; }
+.appendix-cell .body { font-size: 13px; line-height: 1.7; color: var(--ink-soft); max-height: 0; overflow: hidden; transition: max-height 0.25s ease; }
+.appendix-cell.open .body { max-height: 500px; }
+.appendix-cell .body b { color: var(--ink); font-weight: 600; }
+.appendix-cell .toggle-hint { font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.05em; }
+
+/* ================= COLOPHON ================= */
+
+.colophon-rich {
+  margin-top: 4.5rem;
+  padding-top: 1.6rem;
+  border-top: 1px solid var(--line-strong);
+}
+
+.colophon-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.4rem;
+}
+
+.colophon-row > div { display: flex; flex-direction: column; gap: 4px; }
+
+.ct-label {
   font-family: 'IBM Plex Mono', monospace;
-  font-size: 10.5px;
-  color: var(--muted);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.ct-val {
+  font-family: 'Fraunces', serif;
+  font-size: 0.95rem;
+  color: var(--ink);
+}
+
+.colophon {
+  margin-top: 1.8rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--line);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: var(--ink-faint);
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 8px;
+  text-transform: uppercase;
 }
 
-@media (max-width: 600px) {
-  .panel-frame { padding: 1.2rem 1rem; border-left-width: 4px; }
-  .week-table { font-size: 12px; }
-  .hero-title { letter-spacing: -0.01em; }
+@media (max-width: 760px) {
+  .hero { grid-template-columns: 1fr; gap: 2rem; padding-top: 2.2rem; }
+  .hero-right { border-left: none; padding-left: 0; border-top: 1px solid var(--line-strong); padding-top: 1.6rem; }
+  .hero-meta-row { grid-template-columns: 1fr; margin-top: 2.4rem; }
+  .panel-grid { grid-template-columns: 1fr; gap: 1.4rem; }
+  .panel-side { border-right: none; padding-right: 0; border-bottom: 1px solid var(--line-strong); padding-bottom: 1.6rem; }
+  .appendix-grid { grid-template-columns: 1fr; }
+  .week-row { grid-template-columns: 40px 1fr; }
+  .week-tag { grid-column: 1 / -1; justify-self: start; margin-top: 6px; }
+  .colophon-row { grid-template-columns: 1fr 1fr; gap: 1.2rem 1rem; }
 }
 </style>
 </head>
 <body>
 
+<div class="blob-field">
+  <svg width="420" height="420" style="top:-140px; left:-160px; opacity:0.5;" viewBox="0 0 200 200">
+    <path fill="#D4A24C" fill-opacity="0.28" d="M56.8,-64.3C72.1,-54.1,82.2,-35.5,84.6,-16.4C87,2.7,81.7,22.3,70.6,37.5C59.5,52.7,42.6,63.5,24.3,69.4C6,75.3,-13.7,76.3,-30.9,69.8C-48.1,63.3,-62.8,49.3,-70.5,32C-78.2,14.7,-78.9,-5.9,-72.1,-23.4C-65.3,-40.9,-51,-55.3,-35,-64.5C-19,-73.7,-1.3,-77.7,15.3,-75.5C31.9,-73.3,41.5,-74.5,56.8,-64.3Z" transform="translate(100 100)"/>
+  </svg>
+  <svg width="380" height="380" style="top:620px; right:-140px; opacity:0.45;" viewBox="0 0 200 200">
+    <path fill="#8E9B7E" fill-opacity="0.24" d="M45.2,-52.1C57.6,-42.6,65.6,-26.8,68.1,-9.9C70.6,7,67.6,25,57.9,38.4C48.2,51.8,31.8,60.6,14.1,64.8C-3.6,69,-22.6,68.6,-38.2,60.4C-53.8,52.2,-66,36.2,-70.2,18.1C-74.4,0,-70.6,-20.2,-60.1,-35.8C-49.6,-51.4,-32.4,-62.4,-14.5,-65.1C3.4,-67.8,32.8,-61.6,45.2,-52.1Z" transform="translate(100 100)"/>
+  </svg>
+  <svg width="320" height="320" style="bottom:-100px; left:10%; opacity:0.4;" viewBox="0 0 200 200">
+    <path fill="#A85D52" fill-opacity="0.20" d="M39.8,-46.5C50.9,-38.4,58.6,-24.8,61.2,-9.8C63.8,5.2,61.3,21.6,52.8,33.8C44.3,46,29.8,54,13.8,59.1C-2.2,64.2,-19.7,66.4,-34.4,60.2C-49.1,54,-61,39.4,-66.1,22.5C-71.2,5.6,-69.5,-13.6,-60.8,-28.5C-52.1,-43.4,-36.4,-54,-20.5,-59.6C-4.6,-65.2,11.5,-65.8,25.5,-60.3C39.5,-54.8,39.5,-54.8,39.8,-46.5Z" transform="translate(100 100)"/>
+  </svg>
+  <svg width="260" height="260" style="top:1500px; right:6%; opacity:0.4;" viewBox="0 0 200 200">
+    <path fill="#7A3B3F" fill-opacity="0.16" d="M44.3,-51.2C56.4,-41.7,64,-26.5,66.4,-10.4C68.8,5.7,66,22.7,57.1,35.9C48.2,49.1,33.2,58.5,16.5,63.2C-0.2,67.9,-18.6,67.9,-33.9,60.6C-49.2,53.3,-61.4,38.7,-66.5,21.6C-71.6,4.5,-69.6,-15.1,-60.6,-30.1C-51.6,-45.1,-35.6,-55.5,-19.3,-63.1C-3,-70.7,13.6,-75.5,26.9,-70.3C40.2,-65.1,32.2,-60.7,44.3,-51.2Z" transform="translate(100 100)"/>
+  </svg>
+</div>
+
+<svg width="0" height="0" style="position:absolute;">
+  <defs>
+    <filter id="inkTexture"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" result="noise"/><feColorMatrix in="noise" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.04 0"/></filter>
+  </defs>
+</svg>
+
 <div class="wrap">
 
+  <div class="masthead">
+    <span>Protocolo — edição privada</span>
+    <span class="issue">Nº III · MAKI</span>
+  </div>
+
+  <div class="editorial-letter">
+    <div class="sig-kicker">carta da edição</div>
+    <p>"Não nasci sabendo. Treinei até sobrar só o que funciona — e é isso que está aqui."</p>
+    <div class="sig">— H.</div>
+  </div>
+
   <section class="hero">
-    <div class="hero-stamp mono">nenhuma técnica amaldiçoada — só isso aqui</div>
-    <h1 class="hero-title">
-      <span class="strike">talento</span>
-      <span class="real">MAKI</span>
-    </h1>
-    <p class="hero-sub">construída, não dada.</p>
-    <p class="hero-manifesto">
-      <strong>Referência:</strong> Maki Zenin — fisicamente a mais forte da série sem nenhum dom especial, construída inteira via treino bruto. Pernas, glúteo e cintura vêm primeiro; costas e ombro fecham a proporção.
-    </p>
-    <div class="hero-meta">
-      <span>5X/SEM + SÁB OPCIONAL</span>
-      <span>LEGS 3X · UPPER 2X</span>
-      <span>SKILL FRESCO SEMPRE</span>
+    <span class="frame-corner tl"></span>
+    <span class="frame-corner br"></span>
+    <span class="hero-ring"></span>
+    <div class="hero-left">
+      <div class="hero-kicker">construção física, sem técnica amaldiçoada</div>
+      <h1 class="hero-title">Maki<br><span class="it">por inteiro</span></h1>
+    </div>
+    <div class="hero-right">
+      <p class="hero-manifesto">A mais forte da série <b>sem nenhum dom</b> — tudo o que ela tem, ela construiu. Pernas, glúteo e cintura vêm primeiro; costas e ombro fecham a proporção.</p>
+    </div>
+    <div class="hero-meta-row">
+      <div class="hero-meta-cell"><div class="num">5+1</div><div class="lbl">dias por semana</div></div>
+      <div class="hero-meta-cell"><div class="num">3:2</div><div class="lbl">pernas : upper</div></div>
+      <div class="hero-meta-cell"><div class="num">I</div><div class="lbl">skill fresco, sempre</div></div>
     </div>
   </section>
 
   <section id="semana">
-    <h2 class="section-title">a semana</h2>
-    <div class="week-card">
-      <table class="week-table">
-        <tr><th>dia</th><th>treino</th></tr>
-        <tr><td>Segunda</td><td><span class="day-chip" style="background:rgba(232,25,79,0.16); color:#FF4D7D;">Legs A</span></td></tr>
-        <tr><td>Terça</td><td><span class="day-chip" style="background:rgba(201,166,107,0.16); color:#D9BC85;">Upper</span></td></tr>
-        <tr><td>Quarta</td><td><span class="day-chip" style="background:rgba(232,25,79,0.16); color:#FF4D7D;">Legs B</span></td></tr>
-        <tr><td>Quinta</td><td><span class="day-chip" style="background:rgba(201,166,107,0.16); color:#D9BC85;">Upper/Calistenia + Core</span></td></tr>
-        <tr><td>Sexta</td><td><span class="day-chip" style="background:rgba(232,25,79,0.16); color:#FF4D7D;">Legs C</span></td></tr>
-        <tr><td>Sábado</td><td style="color:var(--muted);">Opcional — cardio leve ou calistenia, sem obrigação</td></tr>
-        <tr><td>Domingo</td><td style="color:var(--muted);">Descanso</td></tr>
-      </table>
+    <div class="section-label"><span class="n">01</span><h2>a semana</h2><span class="rule"></span></div>
+    <div class="week-index">
+      <div class="week-row">
+        <div class="day-num">01<span class="dot" style="width:6px; height:6px; background:var(--rose-deep); position:static; display:inline-block; margin-left:6px; vertical-align:middle;"></span></div>
+        <div><div class="day-name">Segunda</div><div class="day-title">Legs A</div></div>
+        <div class="week-tag" style="background:rgba(201,123,107,0.15); color:var(--rose-deep);">Quadríceps · Glúteo</div>
+      </div>
+      <div class="week-row">
+        <div class="day-num">02<span class="dot" style="width:6px; height:6px; background:var(--sage-deep); position:static; display:inline-block; margin-left:6px; vertical-align:middle;"></span></div>
+        <div><div class="day-name">Terça</div><div class="day-title">Upper</div></div>
+        <div class="week-tag" style="background:rgba(142,155,126,0.18); color:var(--sage-deep);">Costas · Ombro</div>
+      </div>
+      <div class="week-row">
+        <div class="day-num">03<span class="dot" style="width:6px; height:6px; background:var(--mustard-deep); position:static; display:inline-block; margin-left:6px; vertical-align:middle;"></span></div>
+        <div><div class="day-name">Quarta</div><div class="day-title">Legs B</div></div>
+        <div class="week-tag" style="background:rgba(212,162,76,0.2); color:var(--mustard-deep);">Glúteo · Posterior</div>
+      </div>
+      <div class="week-row">
+        <div class="day-num">04<span class="dot" style="width:6px; height:6px; background:var(--sage-deep); position:static; display:inline-block; margin-left:6px; vertical-align:middle;"></span></div>
+        <div><div class="day-name">Quinta</div><div class="day-title">Upper + Core</div></div>
+        <div class="week-tag" style="background:rgba(142,155,126,0.18); color:var(--sage-deep);">Peito · Core</div>
+      </div>
+      <div class="week-row">
+        <div class="day-num">05<span class="dot" style="width:6px; height:6px; background:var(--wine); position:static; display:inline-block; margin-left:6px; vertical-align:middle;"></span></div>
+        <div><div class="day-name">Sexta</div><div class="day-title">Legs C</div></div>
+        <div class="week-tag" style="background:rgba(122,59,63,0.14); color:var(--wine);">Unilateral</div>
+      </div>
+      <div class="week-row">
+        <div class="day-num">06</div>
+        <div><div class="day-name">Sábado</div><div class="day-title">Opcional</div></div>
+        <div class="week-tag" style="background:transparent; color:var(--ink-faint); border:1px solid var(--line-strong);">Sem obrigação</div>
+      </div>
+      <div class="week-row" style="border-bottom:none;">
+        <div class="day-num">07</div>
+        <div><div class="day-name">Domingo</div><div class="day-title">Descanso</div></div>
+        <div class="week-tag" style="background:transparent; color:var(--ink-faint); border:1px solid var(--line-strong);">—</div>
+      </div>
     </div>
-    <p class="week-note">Legs bate 3x, Upper 2x — reflete a prioridade real dela: pernas > glúteos > cintura fina > costas/ombro > shape geral. Sábado é opcional porque ela mesma sugeriu, não porque o sistema exige — cardio ou calistenia solta, sem cobrança.</p>
+    <p class="week-note">Legs bate três vezes, Upper duas — reflete a prioridade real dela: pernas, glúteos, cintura fina, depois costas e ombro. O sábado existe porque ela mesma sugeriu, não porque o sistema exige.</p>
   </section>
 
   <nav class="tabs-nav" id="tabsNav"></nav>
 
   <div id="panels"></div>
 
-  <section id="apendice" style="margin-top: 3rem;">
-    <h2 class="section-title">apêndice</h2>
-    <div id="accordion"></div>
+  <section id="apendice">
+    <div class="section-label"><span class="n">02</span><h2>notas</h2><span class="rule"></span></div>
+    <div class="appendix-grid" id="accordion"></div>
   </section>
 
-  <footer>
-    <span>PROTOCOLO MAKI</span>
-    <span>~1,61M · ~48KG · 17 ANOS</span>
-    <span>DESLIGA A CABEÇA NO TREINO</span>
-  </footer>
+  <div class="colophon-rich">
+    <div class="colophon-row">
+      <div><span class="ct-label">conceito</span><span class="ct-val">Darkline Studio</span></div>
+      <div><span class="ct-label">dados</span><span class="ct-val">Helena</span></div>
+      <div><span class="ct-label">edição</span><span class="ct-val">Nº III</span></div>
+      <div><span class="ct-label">série</span><span class="ct-val">Toji · Megumi · Maki</span></div>
+    </div>
+  </div>
+
+  <div class="colophon">
+    <span>Protocolo Maki</span>
+    <span>1,61m · 48kg · 17 anos</span>
+    <span>desliga a cabeça no treino</span>
+  </div>
 
 </div>
 
 <script>
 const DAY_COLORS = {
-  legs: { bg: '#E8194F', light: 'rgba(232,25,79,0.16)', text: '#FF4D7D' },
-  upper: { bg: '#C9A66B', light: 'rgba(201,166,107,0.16)', text: '#D9BC85' }
+  legs: { bg: '#C97B6B', light: 'rgba(201,123,107,0.15)' },
+  upper: { bg: '#8E9B7E', light: 'rgba(142,155,126,0.16)' }
+};
+
+const DAY_ACCENT = {
+  seg: { bg: '#A85D52', light: 'rgba(201,123,107,0.15)' },
+  ter: { bg: '#5E6B4F', light: 'rgba(142,155,126,0.18)' },
+  qua: { bg: '#A87824', light: 'rgba(212,162,76,0.2)' },
+  qui: { bg: '#5E6B4F', light: 'rgba(142,155,126,0.18)' },
+  sex: { bg: '#7A3B3F', light: 'rgba(122,59,63,0.14)' }
 };
 
 const days = [
   {
-    id: 'seg', label: 'SEG', type: 'legs',
+    id: 'seg', label: 'Seg', num: '01', type: 'legs',
     title: 'Legs A', subtitle: 'quadríceps · glúteo',
-    intro: 'Prioridade #1 dela — quadríceps e glúteo abrem a semana frescos, com o composto principal levando o peso real do dia.',
+    intro: 'Prioridade número um dela — quadríceps e glúteo abrem a semana frescos, com o composto principal levando o peso real do dia.',
     warmup: 'hip 90/90 · ativação de glúteo · mobilidade de tornozelo',
-    skill: { name: 'Búlgaro', desc: 'PROG · PESO CORP.' },
+    skill: { name: 'Búlgaro', desc: 'Progressão · peso corporal' },
     exercises: [
       { name: 'Agachamento livre', rir: 'RIR 2', role: 'Composto principal', detail: 'Quadríceps — motor do dia.' },
-      { name: 'Hip thrust (barra)', rir: 'RIR 2', role: 'Composto', detail: 'Glúteo — prioridade #2 dela.' },
+      { name: 'Hip thrust (barra)', rir: 'RIR 2', role: 'Composto', detail: 'Glúteo — prioridade nº2 dela.' },
       { name: 'Leg press', rir: 'RIR 1-2', role: 'Composto', detail: 'Quadríceps, sem carga axial.' },
       { name: 'Cadeira extensora', rir: 'RIR 0-1', role: 'Isolador', detail: 'Quadríceps — finalização.' },
       { name: 'Panturrilha', rir: 'RIR 0-1', role: 'Isolador', detail: '' }
@@ -537,11 +692,11 @@ const days = [
     cooldown: 'Alongamento de quadríceps e flexor de quadril.'
   },
   {
-    id: 'ter', label: 'TER', type: 'upper',
+    id: 'ter', label: 'Ter', num: '02', type: 'upper',
     title: 'Upper', subtitle: 'costas · ombro',
     intro: 'Costas e ombro fecham a proporção — prioridade real, mas não a primeira. Elevação lateral entra pelo contraste visual que dá à cintura.',
     warmup: 'rotação torácica · band pull-apart · mobilidade de ombro',
-    skill: { name: 'Barra fixa', desc: 'NEG · ASSIST.' },
+    skill: { name: 'Barra fixa', desc: 'Negativas · assistida' },
     exercises: [
       { name: 'Puxada aberta', rir: 'RIR 2', role: 'Composto — largura', detail: 'Costas.' },
       { name: 'Remada curvada/máquina', rir: 'RIR 2', role: 'Composto — espessura', detail: 'Costas.' },
@@ -552,26 +707,26 @@ const days = [
     cooldown: 'Alongamento de dorsais e ombro.'
   },
   {
-    id: 'qua', label: 'QUA', type: 'legs',
+    id: 'qua', label: 'Qua', num: '03', type: 'legs',
     title: 'Legs B', subtitle: 'glúteo-dominante · posterior',
     intro: 'Segunda dose de perna — muda o ângulo pra glúteo médio e posterior, sem repetir o estímulo de segunda.',
     warmup: 'alongamento dinâmico de posterior · ativação de glúteo',
-    skill: { name: 'Búlgaro', desc: 'PROG · CONT.' },
+    skill: { name: 'Búlgaro', desc: 'Progressão · continuação' },
     exercises: [
       { name: 'RDL', rir: 'RIR 2', role: 'Composto', detail: 'Posterior/glúteo.' },
       { name: 'Cadeira abdutora', rir: 'RIR 0-1', role: 'Isolador', detail: 'Glúteo médio.' },
       { name: 'Cadeira flexora', rir: 'RIR 0-1', role: 'Isolador', detail: 'Posterior.' },
-      { name: 'Elevação pélvica unilateral', rir: 'RIR 0-1', role: 'Isolador', detail: 'Glúteo extra — prioridade #2 dela.' },
+      { name: 'Elevação pélvica unilateral', rir: 'RIR 0-1', role: 'Isolador', detail: 'Glúteo extra — prioridade nº2 dela.' },
       { name: 'Panturrilha (ângulo diferente)', rir: 'RIR 0-1', role: 'Isolador', detail: '' }
     ],
     cooldown: 'Alongamento de posterior de coxa.'
   },
   {
-    id: 'qui', label: 'QUI', type: 'upper',
-    title: 'Upper/Calistenia + Core', subtitle: 'peito · core',
-    intro: 'Supino/flexão assistida constrói base real pra flexão de verdade. Core usa anti-rotação (Pallof press) — protege a cintura fina sem engrossar.',
+    id: 'qui', label: 'Qui', num: '04', type: 'upper',
+    title: 'Upper + Core', subtitle: 'peito · core',
+    intro: 'Supino/flexão assistida constrói base real pra flexão de verdade. Core usa anti-rotação — protege a cintura fina sem engrossar.',
     warmup: 'mobilidade geral de ombro e quadril',
-    skill: { name: 'Flexão + Barra', desc: 'PROG · CONT.' },
+    skill: { name: 'Flexão + Barra', desc: 'Progressão · continuação' },
     exercises: [
       { name: 'Supino ou flexão assistida com carga', rir: 'RIR 2', role: 'Composto', detail: 'Peito — constrói pra flexão real.' },
       { name: 'Crucifixo/Crossover', rir: 'RIR 1-2', role: 'Isolador', detail: 'Peito.' },
@@ -582,11 +737,11 @@ const days = [
     cooldown: 'Alongamento peitoral.'
   },
   {
-    id: 'sex', label: 'SEX', type: 'legs',
+    id: 'sex', label: 'Sex', num: '05', type: 'legs',
     title: 'Legs C', subtitle: 'unilateral · funcional',
     intro: 'Fecha a semana de perna — búlgaro evolui pra halteres, peso corporal vira carga real.',
     warmup: 'mobilidade de quadril',
-    skill: { name: 'Búlgaro', desc: 'EVOL. · HALT.' },
+    skill: { name: 'Búlgaro', desc: 'Evolução · halteres' },
     exercises: [
       { name: 'Búlgaro (halteres)', rir: 'RIR 1-2', role: 'Unilateral', detail: 'Evolução final da semana.' },
       { name: 'Afundo ou stiff unilateral', rir: 'RIR 1-2', role: 'Funcional', detail: '' },
@@ -596,13 +751,13 @@ const days = [
     cooldown: 'Alongamento geral de perna.'
   },
   {
-    id: 'sab', label: 'SÁB', type: 'rest',
+    id: 'sab', label: 'Sáb', num: '06', type: 'rest',
     title: 'Sábado opcional', subtitle: 'cardio leve ou calistenia solta',
     intro: 'Sem obrigação — ela mesma sugeriu esse dia. Entra como extra, nunca como cobrança.',
     rest: true
   },
   {
-    id: 'dom', label: 'DOM', type: 'rest',
+    id: 'dom', label: 'Dom', num: '07', type: 'rest',
     title: 'Descanso', subtitle: '',
     intro: 'Recuperação real, sem culpa.',
     rest: true
@@ -616,15 +771,15 @@ const accordionData = [
   },
   {
     title: 'Execução e progressão',
-    body: '<b>Estrutura:</b> 3-4 séries de 10-12 reps, progressão dupla — não bate 10 em tudo, segura peso; bate 12 em tudo, sobe peso.<br><br><b>RIR calibrado por papel:</b> composto principal 2, secundários 1-2, isoladores 0-1. Ela já tem experiência real — sente resultado, empurra perto do limite — então não precisa do conservadorismo extra que o Diego (Protocolo Megumi) ainda precisa.<br><br>Skills (búlgaro, barra fixa, flexão) progridem por <b>qualidade de execução</b>, nunca por quantidade forçada — mesma lógica dos outros dois protocolos.'
+    body: '<b>Estrutura:</b> 3-4 séries de 10-12 reps, progressão dupla. <b>RIR calibrado por papel:</b> composto principal 2, secundários 1-2, isoladores 0-1. Ela já tem experiência real — sente resultado, empurra perto do limite — então não precisa do conservadorismo extra que o Diego ainda precisa. Skills progridem por qualidade de execução, nunca por quantidade forçada.'
   },
   {
     title: 'Prioridade real',
-    body: 'Pernas > glúteos > cintura fina > costas/ombro > shape geral em X — nessa ordem, segundo as próprias respostas dela. A frequência semanal reflete isso de verdade: Legs 3x, Upper 2x — não é distribuição igual por padrão, é peso proporcional à prioridade declarada.'
+    body: 'Pernas, glúteos, cintura fina, depois costas e ombro, depois shape geral — nessa ordem, segundo as próprias respostas dela. A frequência semanal reflete isso de verdade: <b>Legs 3x, Upper 2x</b> — não é distribuição igual por padrão, é peso proporcional à prioridade declarada.'
   },
   {
     title: 'Origem do protocolo',
-    body: 'Construído a partir de dados atuais da Helena: 17 anos, 1,61m, 48kg, treina hoje 5x/semana (tarde, 1h-2h), sem dor ou lesão. Quer muito calistenia (flexão, barra, búlgaro) mas ainda não tem força de base — por isso entram como skill em progressão, não como cobrança de execução perfeita. Prefere "desligar a cabeça" durante o treino — abordagem não hiper-técnica na hora de executar.'
+    body: 'Construído a partir de dados atuais da Helena: 17 anos, 1,61m, 48kg, treina hoje 5x/semana, sem dor ou lesão. Quer muito calistenia mas ainda não tem força de base — por isso entram como skill em progressão. Prefere <b>desligar a cabeça</b> durante o treino — abordagem não hiper-técnica na hora de executar.'
   }
 ];
 
@@ -635,26 +790,13 @@ function buildTabs() {
     btn.className = 'tab-btn' + (i === 0 ? ' active' : '');
     btn.textContent = d.label;
     btn.dataset.id = d.id;
-    if (i === 0) applyActiveStyle(btn, d.type);
     btn.addEventListener('click', () => selectDay(d.id));
     nav.appendChild(btn);
   });
 }
 
-function applyActiveStyle(btn, type) {
-  const c = DAY_COLORS[type];
-  if (c) { btn.style.background = c.bg; btn.style.borderColor = c.bg; }
-  else { btn.style.background = 'var(--muted)'; btn.style.borderColor = 'var(--muted)'; }
-}
-
-function clearActiveStyle(btn) { btn.style.background = 'var(--panel)'; btn.style.borderColor = ''; }
-
 function selectDay(id) {
-  document.querySelectorAll('.tab-btn').forEach(btn => {
-    const day = days.find(d => d.id === btn.dataset.id);
-    if (btn.dataset.id === id) { btn.classList.add('active'); applyActiveStyle(btn, day.type); }
-    else { btn.classList.remove('active'); clearActiveStyle(btn); }
-  });
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.id === id));
   document.querySelectorAll('.day-panel').forEach(p => p.classList.toggle('active', p.dataset.id === id));
 }
 
@@ -667,76 +809,94 @@ function buildPanels() {
 
     if (d.rest) {
       panel.innerHTML = `
-        <div class="panel-frame" style="border-left-color: var(--line-strong);">
-          <h2 class="panel-heading">${d.title}</h2>
-          <p class="panel-subhead">${d.subtitle}</p>
-          ${d.intro ? `<p class="panel-intro">${d.intro}</p>` : ''}
+        <div class="panel-grid">
+          <span class="frame-corner tl"></span>
+          <span class="frame-corner br"></span>
+          <div class="panel-seal">${d.num}</div>
+          ${d.id === todayId ? '<span class="today-mark">hoje</span>' : ''}
+          <span class="page-num">p. ${d.num}</span>
+          <div class="panel-side">
+            <div class="panel-eyebrow">${d.num} — ${d.label}</div>
+            <h2 class="panel-heading">${d.title}</h2>
+            <p class="panel-subhead">${d.subtitle}</p>
+          </div>
+          <div>
+            <p class="panel-intro">${d.intro}</p>
+          </div>
         </div>`;
       container.appendChild(panel);
       return;
     }
 
-    const c = DAY_COLORS[d.type];
-    let html = `<div class="panel-frame" style="border-left-color: ${c.bg};">`;
-    html += `<h2 class="panel-heading">${d.title}</h2>`;
-    html += `<p class="panel-subhead">${d.subtitle}</p>`;
-    if (d.intro) html += `<p class="panel-intro">${d.intro}</p>`;
-
-    html += `<div class="block-label">aquecimento</div>`;
-    html += `<p class="warmup-list">${d.warmup}</p>`;
+    const c = DAY_ACCENT[d.id] || DAY_COLORS[d.type];
+    let html = `<div class="panel-grid">
+      <span class="frame-corner tl"></span>
+      <span class="frame-corner br"></span>
+      <div class="panel-seal" style="border-color:${c.bg}; color:${c.bg};">${d.num}</div>
+      ${d.id === todayId ? '<span class="today-mark">hoje</span>' : ''}
+      <span class="page-num">p. ${d.num}</span>
+      <div class="panel-side">
+        <div class="panel-eyebrow" style="color:${c.bg};">${d.num} — ${d.label}</div>
+        <h2 class="panel-heading">${d.title}</h2>
+        <p class="panel-subhead">${d.subtitle}</p>
+        <p class="panel-intro">${d.intro}</p>
+        <div class="side-block">
+          <div class="label">Aquecimento</div>
+          <div class="val">${d.warmup}</div>
+        </div>`;
 
     if (d.skill) {
-      html += `<div class="skill-row">
-        <div class="skill-stamp">${d.skill.desc}</div>
-        <div><div class="skill-name">${d.skill.name}</div><div class="skill-desc">skill · fresco</div></div>
+      html += `<div class="skill-plate">
+        <div class="label">Skill do dia</div>
+        <div class="name">${d.skill.name}</div>
+        <div class="stage">${d.skill.desc}</div>
       </div>`;
     }
 
-    html += `<div class="block-label">exercícios</div>`;
+    html += `</div><div>
+      <div class="ex-list">`;
+
     d.exercises.forEach((ex, idx) => {
-      html += `<div class="ex-card" data-idx="${idx}">
-        <div class="ex-head">
-          <div class="ex-name">${ex.name}</div>
-          <div class="ex-head-right">
-            ${ex.rir ? `<span class="ex-rir">${ex.rir}</span>` : ''}
-            <span class="ex-toggle">+</span>
-          </div>
+      html += `<div class="ex-row" data-idx="${idx}">
+        <div class="ex-row-head">
+          <div class="idx">${String(idx + 1).padStart(2, '0')}</div>
+          <div class="name">${ex.name}</div>
+          ${ex.rir ? `<div class="rir">${ex.rir}</div>` : '<div></div>'}
+          <div class="plus">+</div>
         </div>
-        <div class="ex-body"><div class="ex-body-inner"><b>${ex.role}</b>${ex.detail ? ' — ' + ex.detail : ''}</div></div>
+        <div class="ex-row-body"><div class="ex-row-body-inner"><b>${ex.role}</b>${ex.detail ? ' — ' + ex.detail : ''}</div></div>
       </div>`;
     });
 
-    html += `<div class="cooldown">${d.cooldown}</div>`;
-    html += `</div>`;
+    html += `</div><div class="cooldown-line">${d.cooldown}</div></div></div>`;
 
     panel.innerHTML = html;
     container.appendChild(panel);
   });
 
-  document.querySelectorAll('.ex-card').forEach(card => {
-    card.querySelector('.ex-head').addEventListener('click', () => {
-      const isOpen = card.classList.contains('open');
-      card.classList.toggle('open', !isOpen);
-      card.querySelector('.ex-toggle').textContent = isOpen ? '+' : '×';
+  document.querySelectorAll('.ex-row').forEach(row => {
+    row.querySelector('.ex-row-head').addEventListener('click', () => {
+      const isOpen = row.classList.contains('open');
+      row.classList.toggle('open', !isOpen);
+      row.querySelector('.plus').textContent = isOpen ? '+' : '−';
     });
   });
 }
 
 function buildAccordion() {
   const container = document.getElementById('accordion');
-  accordionData.forEach((item) => {
+  accordionData.forEach((item, i) => {
     const el = document.createElement('div');
-    el.className = 'accordion-item';
+    el.className = 'appendix-cell';
     el.innerHTML = `
-      <div class="accordion-head">
-        <h3>${item.title}</h3>
-        <span class="accordion-plus">+</span>
-      </div>
-      <div class="accordion-body"><div class="accordion-body-inner">${item.body}</div></div>`;
-    el.querySelector('.accordion-head').addEventListener('click', () => {
+      <div class="num">${String(i + 1).padStart(2, '0')}</div>
+      <h3>${item.title}</h3>
+      <div class="body">${item.body}</div>
+      <div class="toggle-hint">ler mais</div>`;
+    el.addEventListener('click', () => {
       const isOpen = el.classList.contains('open');
       el.classList.toggle('open', !isOpen);
-      el.querySelector('.accordion-plus').textContent = isOpen ? '+' : '×';
+      el.querySelector('.toggle-hint').textContent = isOpen ? 'ler mais' : 'fechar';
     });
     container.appendChild(el);
   });
@@ -749,17 +909,17 @@ function initPWA() {
     description: 'Construída, não dada — rotina de treino da Helena.',
     start_url: '.',
     display: 'standalone',
-    background_color: '#1A0A0E',
-    theme_color: '#1A0A0E',
+    background_color: '#EFE3DC',
+    theme_color: '#EFE3DC',
     orientation: 'portrait-primary',
     icons: [
       {
-        src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' fill='%231A0A0E'/%3E%3Ctext x='96' y='134' font-family='Georgia, serif' font-size='112' font-weight='900' fill='%23E8194F' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E",
+        src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' fill='%233B2A2E'/%3E%3Ctext x='96' y='130' font-family='Georgia, serif' font-size='102' fill='%23EFE3DC' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E",
         sizes: '192x192',
         type: 'image/svg+xml'
       },
       {
-        src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%231A0A0E'/%3E%3Ctext x='256' y='356' font-family='Georgia, serif' font-size='300' font-weight='900' fill='%23E8194F' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E",
+        src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%233B2A2E'/%3E%3Ctext x='256' y='348' font-family='Georgia, serif' font-size='272' fill='%23EFE3DC' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E",
         sizes: '512x512',
         type: 'image/svg+xml'
       }
@@ -774,7 +934,7 @@ function initPWA() {
       self.addEventListener('activate', e => self.clients.claim());
       self.addEventListener('fetch', e => {
         e.respondWith(
-          caches.open('maki-v2').then(cache =>
+          caches.open('maki-v3').then(cache =>
             fetch(e.request).then(res => {
               cache.put(e.request, res.clone());
               return res;
@@ -788,13 +948,14 @@ function initPWA() {
   }
 }
 
+const WEEKDAY_TO_ID = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sab'];
+const todayId = WEEKDAY_TO_ID[new Date().getDay()];
+
 initPWA();
 buildTabs();
 buildPanels();
 buildAccordion();
 
-const WEEKDAY_TO_ID = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sab'];
-const todayId = WEEKDAY_TO_ID[new Date().getDay()];
 if (days.find(d => d.id === todayId)) selectDay(todayId);
 </script>
 
