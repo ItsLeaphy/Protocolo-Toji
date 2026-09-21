@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Protocolo Megumi</title>
+<meta name="theme-color" content="#14151f">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Megumi">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%2389b4fa'/%3E%3Cstop offset='1' stop-color='%23cba6f7'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='26' fill='%2314151f'/%3E%3Ccircle cx='50' cy='50' r='28' fill='url(%23g)'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%2389b4fa'/%3E%3Cstop offset='1' stop-color='%23cba6f7'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='26' fill='%2314151f'/%3E%3Ccircle cx='50' cy='50' r='28' fill='url(%23g)'/%3E%3C/svg%3E">
+<link id="manifestLink" rel="manifest" href="">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg1: #12131c;
+  --bg2: #1a1c2a;
+  --glass: rgba(255,255,255,0.045);
+  --glass-strong: rgba(255,255,255,0.075);
+  --border: rgba(255,255,255,0.09);
+  --border-strong: rgba(255,255,255,0.16);
+  --ink: #e4e6f1;
+  --ink-soft: #8b8fa8;
+  --ink-dim: #5f637c;
+  --blue: #89b4fa;
+  --mauve: #cba6f7;
+  --green: #a6e3a1;
+  --peach: #fab387;
+  --yellow: #f9e2af;
+  --pink: #f5c2e7;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg1);
+  color: var(--ink);
+  font-family: 'Manrope', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+body { position: relative; min-height: 100vh; }
+
+.mono { font-family: 'JetBrains Mono', monospace; }
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse 1000px 700px at 10% -10%, rgba(137,180,250,0.22), transparent 55%),
+    radial-gradient(ellipse 900px 700px at 100% 10%, rgba(203,166,247,0.18), transparent 55%),
+    radial-gradient(ellipse 800px 600px at 30% 100%, rgba(166,227,161,0.10), transparent 55%),
+    radial-gradient(ellipse 700px 500px at 90% 90%, rgba(250,179,135,0.10), transparent 55%),
+    linear-gradient(180deg, var(--bg1), var(--bg2));
+  background-attachment: fixed;
+}
+
+.wrap {
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 1.2rem 6rem;
+  overflow-x: hidden;
+}
+
+.glass {
+  background: var(--glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.28);
+}
+
+/* ---------- TOP BAR ---------- */
+
+.statusbar {
+  position: sticky;
+  top: 10px;
+  z-index: 500;
+  margin: 10px auto 0;
+  max-width: 860px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 18px;
+  border-radius: 18px;
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+.statusbar .pill-group { display: flex; gap: 6px; }
+
+.statusbar .pill {
+  padding: 5px 12px;
+  border-radius: 20px;
+  background: var(--glass-strong);
+  font-weight: 600;
+  font-size: 11.5px;
+}
+
+.statusbar .right { display: flex; gap: 10px; align-items: center; }
+
+.theme-toggle {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--border-strong);
+  background: var(--glass-strong);
+  color: var(--ink);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px;
+  transition: transform 0.15s ease;
+}
+.theme-toggle:hover { transform: scale(1.08); }
+
+.clock { font-weight: 700; color: var(--ink); font-size: 12.5px; }
+
+/* ---------- HERO ---------- */
+
+.hero { padding: 2.4rem 0.3rem 2.2rem; }
+
+.fetch-window {
+  padding: 1.8rem;
+  display: flex;
+  gap: 1.6rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.fetch-orb {
+  flex: 0 0 auto;
+  width: 84px;
+  height: 84px;
+  border-radius: 26px;
+  background: linear-gradient(135deg, var(--blue), var(--mauve));
+  position: relative;
+  box-shadow: 0 10px 30px rgba(137,180,250,0.25);
+}
+
+.fetch-orb::after {
+  content: "";
+  position: absolute;
+  inset: 14px;
+  border-radius: 16px;
+  background: var(--bg1);
+  opacity: 0.85;
+}
+
+.fetch-orb::before {
+  content: "";
+  position: absolute;
+  inset: 26px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--green), var(--peach));
+}
+
+.fetch-info { font-size: 13px; line-height: 1.85; color: var(--ink-soft); }
+.fetch-info b { color: var(--ink); font-weight: 700; }
+.fetch-info .k { color: var(--blue); font-weight: 600; }
+
+.hero-title {
+  font-weight: 800;
+  font-size: clamp(2.3rem, 8.5vw, 4rem);
+  line-height: 1.04;
+  margin: 1.8rem 0 0;
+  letter-spacing: -0.02em;
+}
+
+.hero-title .accent {
+  background: linear-gradient(120deg, var(--blue), var(--mauve));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hero-sub {
+  font-size: clamp(0.95rem, 2.3vw, 1.1rem);
+  color: var(--ink-soft);
+  margin-top: 0.6rem;
+  font-weight: 500;
+}
+
+.hero-manifesto {
+  margin-top: 1.3rem;
+  max-width: 540px;
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: var(--ink-soft);
+}
+
+.hero-manifesto strong { color: var(--ink); font-weight: 700; }
+
+.hero-tags { margin-top: 1.6rem; display: flex; gap: 8px; flex-wrap: wrap; }
+
+.hero-tags span {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 13px;
+  border-radius: 20px;
+  background: var(--glass-strong);
+  border: 1px solid var(--border);
+  color: var(--ink-soft);
+}
+
+/* ---------- SECTION TITLES ---------- */
+
+.section-title {
+  font-weight: 800;
+  font-size: 1.35rem;
+  margin: 0 0 1rem;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.section-title .orb {
+  width: 20px; height: 20px; border-radius: 8px;
+  background: linear-gradient(135deg, var(--blue), var(--mauve));
+  display: inline-block;
+}
+
+/* ---------- WEEK ---------- */
+
+.week-card { padding: 0; overflow: hidden; margin-bottom: 1.2rem; }
+
+.week-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+
+.week-table th {
+  text-align: left;
+  font-size: 10.5px;
+  color: var(--ink-dim);
+  font-weight: 700;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.week-table td { padding: 12px 16px; border-bottom: 1px solid var(--border); font-weight: 500; }
+.week-table tr:last-child td { border-bottom: none; }
+
+.day-chip {
+  display: inline-block;
+  padding: 4px 12px;
+  font-weight: 700;
+  font-size: 12px;
+  border-radius: 20px;
+}
+
+.week-note { font-size: 13.5px; color: var(--ink-soft); line-height: 1.7; max-width: 640px; }
+
+/* ---------- TABS ---------- */
+
+.tabs-nav {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 0.3rem 0 1.4rem;
+  margin-top: 2.6rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+.tab-btn {
+  flex: 0 0 auto;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 9px 18px;
+  background: var(--glass-strong);
+  border: 1px solid var(--border);
+  color: var(--ink-soft);
+  cursor: pointer;
+  border-radius: 16px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.tab-btn:hover { transform: translateY(-1px); }
+
+.tab-btn.active { color: #14151f; border-color: transparent; box-shadow: 0 6px 18px rgba(137,180,250,0.3); }
+
+/* ---------- DAY PANEL ---------- */
+
+.day-panel { display: none; }
+.day-panel.active { display: block; }
+
+.panel-frame { overflow: hidden; }
+
+.panel-topbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.panel-topbar .icon {
+  width: 34px; height: 34px; border-radius: 11px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 13px;
+}
+
+.panel-topbar .name { font-size: 12px; color: var(--ink-dim); font-weight: 600; }
+
+.panel-body { padding: 1.5rem 1.4rem; }
+
+.panel-heading { font-weight: 800; font-size: 1.4rem; margin: 0 0 0.2rem; }
+
+.panel-subhead { font-size: 12px; color: var(--ink-soft); margin-bottom: 1rem; font-weight: 600; }
+
+.panel-intro {
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: var(--ink-soft);
+  max-width: 600px;
+  margin: 0 0 1.4rem;
+  padding: 0.9rem 1.1rem;
+  background: var(--glass-strong);
+  border-radius: 16px;
+}
+
+.block-label {
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: var(--ink-dim);
+  text-transform: uppercase;
+  font-weight: 700;
+  margin: 1.5rem 0 0.6rem;
+}
+
+.warmup-list { font-size: 13.5px; color: var(--ink-soft); margin: 0 0 0.3rem; }
+
+.skill-row {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin: 1.1rem 0 1.5rem;
+  background: var(--glass-strong);
+  border-radius: 18px;
+  padding: 13px 15px;
+}
+
+.skill-stamp {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-weight: 800;
+  text-align: center;
+  line-height: 1.15;
+}
+
+.skill-name { font-weight: 700; font-size: 14.5px; }
+.skill-desc { font-size: 10.5px; color: var(--ink-dim); font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+
+.ex-card {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  margin-bottom: 8px;
+  overflow: hidden;
+  background: var(--glass);
+}
+
+.ex-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 15px;
+  cursor: pointer;
+  gap: 12px;
+}
+
+.ex-head:hover { background: var(--glass-strong); }
+
+.ex-name { font-weight: 600; font-size: 14px; }
+
+.ex-head-right { display: flex; align-items: center; gap: 10px; flex: 0 0 auto; }
+
+.ex-rir {
+  font-size: 10.5px;
+  color: #14151f;
+  background: var(--yellow);
+  padding: 3px 9px;
+  border-radius: 10px;
+  white-space: nowrap;
+  font-weight: 800;
+}
+
+.ex-toggle { font-size: 17px; width: 16px; text-align: center; color: var(--ink-dim); font-weight: 700; }
+
+.ex-body { max-height: 0; overflow: hidden; transition: max-height 0.18s ease; }
+.ex-card.open .ex-body { max-height: 200px; }
+
+.ex-body-inner { padding: 0 15px 14px; font-size: 12.5px; color: var(--ink-soft); line-height: 1.6; }
+.ex-body-inner b { color: var(--blue); font-weight: 700; }
+
+.cooldown {
+  margin-top: 1.5rem;
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+/* ---------- ACCORDION ---------- */
+
+.accordion-item { border-radius: 18px; margin-bottom: 9px; overflow: hidden; background: var(--glass); border: 1px solid var(--border); }
+
+.accordion-head { display: flex; justify-content: space-between; align-items: center; padding: 14px 17px; cursor: pointer; }
+
+.accordion-head h3 { font-size: 1rem; margin: 0; font-weight: 700; }
+
+.accordion-plus { font-size: 18px; color: var(--green); font-weight: 700; }
+
+.accordion-body { max-height: 0; overflow: hidden; transition: max-height 0.2s ease; }
+.accordion-item.open .accordion-body { max-height: 700px; }
+
+.accordion-body-inner { padding: 0 17px 18px; font-size: 13.5px; color: var(--ink-soft); line-height: 1.75; }
+.accordion-body-inner b { color: var(--ink); font-weight: 700; }
+
+footer {
+  margin-top: 3rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--ink-dim);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-weight: 600;
+}
+
+@media (max-width: 600px) {
+  .statusbar { top: 6px; padding: 8px 14px; border-radius: 16px; }
+  .fetch-window { padding: 1.3rem; gap: 1.2rem; }
+  .fetch-orb { width: 64px; height: 64px; border-radius: 20px; }
+  .panel-body { padding: 1.2rem 1rem; }
+  .week-table { font-size: 12px; }
+  .glass { border-radius: 18px; }
+}
+</style>
+</head>
+<body>
+
+<div class="statusbar glass">
+  <div class="pill-group">
+    <span class="pill" style="background:linear-gradient(135deg,var(--blue),var(--mauve)); color:#14151f;">6x/sem</span>
+    <span class="pill">harmonia</span>
+  </div>
+  <div class="right">
+    <button class="theme-toggle" id="themeToggle">◐</button>
+    <span class="clock mono" id="clock">--:--</span>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <section class="hero">
+    <div class="fetch-window glass">
+      <div class="fetch-orb"></div>
+      <div class="fetch-info mono">
+        <div><span class="k">user</span> <b>diego</b></div>
+        <div><span class="k">build</span> protocolo-v1</div>
+        <div><span class="k">uptime</span> ~1 mês</div>
+        <div><span class="k">foco</span> ombro + harmonia</div>
+      </div>
+    </div>
+
+    <h1 class="hero-title">Protocolo <span class="accent">Megumi</span></h1>
+    <p class="hero-sub">equilíbrio real, não cópia reduzida</p>
+    <p class="hero-manifesto">
+      <strong>Referência:</strong> Megumi (JJK) — corpo já bem distribuído, ombro é o único ponto a fechar. Sem V-shape agressivo. Força + funcionalidade pesam tanto quanto estética.
+    </p>
+    <div class="hero-tags">
+      <span>6x/semana</span>
+      <span>quarta = piano</span>
+      <span>skill fresco sempre</span>
+      <span>ombro esq. frágil</span>
+    </div>
+  </section>
+
+  <section id="semana">
+    <h2 class="section-title"><span class="orb"></span>a semana</h2>
+    <div class="week-card glass">
+      <table class="week-table">
+        <tr><th>dia</th><th>treino</th></tr>
+        <tr><td>Segunda</td><td><span class="day-chip" style="background:rgba(250,179,135,0.18); color:var(--peach);">Push</span></td></tr>
+        <tr><td>Terça</td><td><span class="day-chip" style="background:rgba(137,180,250,0.18); color:var(--blue);">Pull</span></td></tr>
+        <tr><td>Quarta</td><td><span class="day-chip" style="background:rgba(166,227,161,0.18); color:var(--green);">Calistenia/Skill leve</span></td></tr>
+        <tr><td>Quinta</td><td><span class="day-chip" style="background:rgba(166,227,161,0.18); color:var(--green);">Legs</span></td></tr>
+        <tr><td>Sexta</td><td><span class="day-chip" style="background:rgba(250,179,135,0.18); color:var(--peach);">Push</span> (ênfase ombro)</td></tr>
+        <tr><td>Sábado</td><td><span class="day-chip" style="background:rgba(137,180,250,0.18); color:var(--blue);">Legs + Pull</span> complementar</td></tr>
+        <tr><td>Domingo</td><td>Descanso</td></tr>
+      </table>
+    </div>
+    <p class="week-note">Push e Pull batem 2x, Legs bate 2x — harmonia real, não cópia do esquema do Toji. Quarta vira dia técnico/leve por causa das aulas de piano — sem fadiga pesada, cabe antes ou depois sem problema. RIR mais conservador em tudo: 1 mês de treino, técnica vem antes de intensidade máxima.</p>
+  </section>
+
+  <nav class="tabs-nav" id="tabsNav"></nav>
+
+  <div id="panels"></div>
+
+  <section id="apendice" style="margin-top: 3rem;">
+    <h2 class="section-title"><span class="orb" style="background:linear-gradient(135deg,var(--green),var(--peach));"></span>apêndice</h2>
+    <div id="accordion"></div>
+  </section>
+
+  <footer>
+    <span>PROTOCOLO MEGUMI</span>
+    <span>~1,73M · ~54KG · 17 ANOS</span>
+    <span>OMBRO ESQUERDO — ESTABILIZAÇÃO EXTRA</span>
+  </footer>
+
+</div>
+
+<script>
+const DAY_COLORS = {
+  push: { bg: '#fab387', light: 'rgba(250,179,135,0.18)' },
+  pull: { bg: '#89b4fa', light: 'rgba(137,180,250,0.18)' },
+  legs: { bg: '#a6e3a1', light: 'rgba(166,227,161,0.18)' }
+};
+
+const days = [
+  {
+    id: 'seg', label: 'Seg', type: 'push',
+    title: 'Push', subtitle: 'peito · ombro · tríceps',
+    intro: 'Ombro entra com prioridade real — não pra virar ponto único, mas porque é o buraco proporcional real do físico dele. Ombro esquerdo mais frágil recebe estabilização, não carga isolada agressiva.',
+    warmup: 'rotação de ombro · band pull-apart leve · wall slides',
+    warmupNote: 'atenção extra — ombro esquerdo, estabilizar antes de carregar',
+    skill: { name: 'Flexão', desc: 'PROG' },
+    exercises: [
+      { name: 'Supino reto (halteres)', rir: 'RIR 2-3', role: 'Composto principal', detail: 'Peito — base do dia.' },
+      { name: 'Desenvolvimento (halteres)', rir: 'RIR 2', role: 'Composto', detail: 'Ombro — prioridade real dele.' },
+      { name: 'Elevação lateral', rir: 'RIR 1-2', role: 'Isolador', detail: 'Ombro lateral.' },
+      { name: 'Crucifixo', rir: 'RIR 1-2', role: 'Isolador', detail: 'Peito.' },
+      { name: 'Tríceps corda', rir: 'RIR 1-2', role: 'Isolador', detail: 'Tríceps.' }
+    ],
+    cooldown: 'Alongamento peitoral e ombro anterior.'
+  },
+  {
+    id: 'ter', label: 'Ter', type: 'pull',
+    title: 'Pull', subtitle: 'costas · bíceps · antebraço',
+    intro: 'Puxada aberta prepara tecnicamente pra barra fixa de verdade — ele ainda está construindo a base. Face pull entra estabilizando o ombro frágil, não só como acessório.',
+    warmup: 'dead hang leve · scapular pull-ups · mobilidade de ombro',
+    skill: { name: 'Barra fixa', desc: 'NEG' },
+    exercises: [
+      { name: 'Puxada aberta', rir: 'RIR 2', role: 'Composto — largura', detail: 'Prepara pra barra fixa de verdade.' },
+      { name: 'Remada curvada', rir: 'RIR 2', role: 'Composto — espessura', detail: 'Costas.' },
+      { name: 'Face pull', rir: 'RIR 1-2', role: 'Isolador', detail: 'Deltoide posterior — estabiliza o ombro frágil.' },
+      { name: 'Rosca direta', rir: 'RIR 1-2', role: 'Isolador', detail: 'Bíceps.' }
+    ],
+    cooldown: 'Alongamento de dorsais.'
+  },
+  {
+    id: 'qua', label: 'Qua', type: 'legs',
+    title: 'Calistenia/Skill leve', subtitle: 'dia técnico — dia do piano',
+    intro: 'Sem fadiga pesada — cabe antes ou depois do piano sem problema. Continuação da progressão de flexão, foco em forma. Cardio leve opcional, já que o interesse em condicionamento tá crescendo.',
+    warmup: 'mobilidade geral de ombro e quadril',
+    exercises: [
+      { name: 'Flexão (progressão, continuação)', rir: '', role: 'Skill — técnica', detail: 'Foco em forma, não em quantidade forçada.' },
+      { name: 'Prancha', rir: '', role: 'Core', detail: 'Já é ponto forte dele — só manter.' },
+      { name: 'Cardio leve (opcional)', rir: '', role: 'Condicionamento', detail: 'Caminhada rápida ou bike, 15-20min.' }
+    ],
+    cooldown: 'Alongamento geral leve.'
+  },
+  {
+    id: 'qui', label: 'Qui', type: 'legs',
+    title: 'Legs', subtitle: 'quadríceps · posterior · panturrilha',
+    intro: 'Búlgaro como skill — ele pediu, começa peso corporal, evolui pra halteres quando a técnica estiver sólida.',
+    warmup: 'mobilidade de quadril · ativação de glúteo',
+    skill: { name: 'Búlgaro', desc: 'PROG' },
+    exercises: [
+      { name: 'Agachamento (livre ou goblet)', rir: 'RIR 2-3', role: 'Composto principal', detail: 'Conforme técnica disponível.' },
+      { name: 'Leg press', rir: 'RIR 2', role: 'Composto', detail: 'Quadríceps.' },
+      { name: 'Cadeira flexora', rir: 'RIR 1-2', role: 'Isolador', detail: 'Posterior.' },
+      { name: 'Panturrilha', rir: 'RIR 1-2', role: 'Isolador', detail: '' }
+    ],
+    cooldown: 'Alongamento de posterior e quadríceps.'
+  },
+  {
+    id: 'sex', label: 'Sex', type: 'push',
+    title: 'Push (ênfase ombro)', subtitle: 'segunda dose de ombro na semana',
+    intro: 'Desenvolvimento e elevação lateral recebem a 2ª dose semanal — ombro é a prioridade real, então aparece 2x, não 1x.',
+    warmup: 'igual segunda — rotação de ombro, band pull-apart, wall slides',
+    skill: { name: 'Flexão', desc: 'EVOL' },
+    exercises: [
+      { name: 'Desenvolvimento (halteres)', rir: 'RIR 2', role: 'Composto', detail: '2ª dose da semana.' },
+      { name: 'Elevação lateral', rir: 'RIR 1-2', role: 'Isolador', detail: '2ª dose da semana.' },
+      { name: 'Supino inclinado', rir: 'RIR 2-3', role: 'Composto', detail: 'Ângulo diferente de segunda.' },
+      { name: 'Crucifixo inverso', rir: 'RIR 1-2', role: 'Isolador', detail: 'Deltoide posterior/estabilidade.' },
+      { name: 'Tríceps francês', rir: 'RIR 1-2', role: 'Isolador', detail: '' }
+    ],
+    cooldown: 'Alongamento peitoral e ombro.'
+  },
+  {
+    id: 'sab', label: 'Sáb', type: 'pull',
+    title: 'Legs + Pull complementar', subtitle: 'sessão mais curta',
+    intro: 'Fecha a frequência 2x de Legs e Pull na semana sem pesar demais — sessão mais curta de propósito.',
+    warmup: 'mobilidade geral',
+    exercises: [
+      { name: 'RDL', rir: 'RIR 2', role: 'Composto', detail: 'Posterior/lombar.' },
+      { name: 'Búlgaro (continuação da skill)', rir: 'RIR 2', role: 'Unilateral', detail: '' },
+      { name: 'Remada unilateral', rir: 'RIR 2', role: 'Composto', detail: 'Costas.' },
+      { name: 'Face pull', rir: 'RIR 1-2', role: 'Isolador', detail: 'Ombro.' }
+    ],
+    cooldown: 'Alongamento geral.'
+  },
+  {
+    id: 'dom', label: 'Dom', type: 'rest',
+    title: 'Descanso', subtitle: '',
+    intro: 'Recuperação real — sem treino, sem culpa.',
+    rest: true
+  }
+];
+
+const accordionData = [
+  {
+    title: 'Execução',
+    body: '<b>Estrutura:</b> 3x10-12, não o 4x8 do Toji — reps um pouco mais altas ajudam a consolidar técnica, que é a prioridade dele agora.<br><br><b>Progressão dupla</b> igual ao Toji: quando bate o topo da faixa em todas as séries, sobe peso.<br><br><b>RIR mais conservador que o Toji em tudo</b> — ele ainda não deveria chegar perto do limite em nada, nem isolador, até a técnica estar redonda.<br><br>Skills (flexão, barra, búlgaro) progridem por <b>qualidade de execução</b>, nunca por quantidade forçada.'
+  },
+  {
+    title: 'Sobre o ombro',
+    body: 'Ombro é a prioridade real do Megumi — não pra virar ponto único dominante, mas porque é o único buraco proporcional identificado no físico dele (corpo já bem distribuído: core ótimo, peito/braço ok). Por isso Desenvolvimento e Elevação lateral aparecem 2x/semana (segunda e sexta), e Face pull entra em Pull e no complemento de sábado como estabilizador direto do ombro esquerdo, que é mais frágil.'
+  },
+  {
+    title: 'Sobre a quarta',
+    body: 'Quarta virou dia técnico/leve de calistenia porque ele tem aula de piano nesse dia — ele mesmo cogitou calistenia como solução antes de perguntado. Sem fadiga pesada, cabe antes ou depois do piano sem conflito. Não é PPL puro igual o Toji porque essa restrição real de agenda não permite.'
+  },
+  {
+    title: 'Origem do protocolo',
+    body: 'Construído a partir dos dados reais do Diego: 17 anos, 1,73m, 54kg, ~1 mês de treino real (não iniciante total — já treinou junto com o Toji e mostrou progressão real). Interesse real em calistenia (flexão, barra, búlgaro). Progressão informal hoje (~8x3, sobe peso quando fica fácil) — formalizada aqui com RIR.'
+  }
+];
+
+function buildTabs() {
+  const nav = document.getElementById('tabsNav');
+  days.forEach((d, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'tab-btn' + (i === 0 ? ' active' : '');
+    btn.textContent = d.label;
+    btn.dataset.id = d.id;
+    if (i === 0) applyActiveStyle(btn, d.type);
+    btn.addEventListener('click', () => selectDay(d.id));
+    nav.appendChild(btn);
+  });
+}
+
+function applyActiveStyle(btn, type) {
+  const c = DAY_COLORS[type];
+  if (c) { btn.style.background = c.bg; }
+  else { btn.style.background = 'var(--ink-soft)'; }
+}
+
+function clearActiveStyle(btn) { btn.style.background = 'var(--glass-strong)'; }
+
+function selectDay(id) {
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    const day = days.find(d => d.id === btn.dataset.id);
+    if (btn.dataset.id === id) { btn.classList.add('active'); applyActiveStyle(btn, day.type); }
+    else { btn.classList.remove('active'); clearActiveStyle(btn); }
+  });
+  document.querySelectorAll('.day-panel').forEach(p => p.classList.toggle('active', p.dataset.id === id));
+}
+
+function buildPanels() {
+  const container = document.getElementById('panels');
+  days.forEach((d, i) => {
+    const panel = document.createElement('div');
+    panel.className = 'day-panel' + (i === 0 ? ' active' : '');
+    panel.dataset.id = d.id;
+
+    if (d.rest) {
+      panel.innerHTML = `
+        <div class="panel-frame glass">
+          <div class="panel-topbar"><div class="icon" style="background:var(--glass-strong); color:var(--ink-soft);">●</div><div class="name">${d.title}</div></div>
+          <div class="panel-body">
+            <h2 class="panel-heading">Descanso</h2>
+            <p class="panel-subhead">recuperação é parte do treino, não ausência dele.</p>
+            ${d.intro ? `<p class="panel-intro">${d.intro}</p>` : ''}
+          </div>
+        </div>`;
+      container.appendChild(panel);
+      return;
+    }
+
+    const c = DAY_COLORS[d.type];
+    let html = `<div class="panel-frame glass">
+      <div class="panel-topbar">
+        <div class="icon" style="background:${c.light}; color:${c.bg};">${d.label}</div>
+        <div class="name">${d.title}</div>
+      </div>
+      <div class="panel-body">`;
+    html += `<h2 class="panel-heading">${d.title}</h2>`;
+    html += `<p class="panel-subhead">${d.subtitle}</p>`;
+    if (d.intro) html += `<p class="panel-intro">${d.intro}</p>`;
+
+    html += `<div class="block-label">Aquecimento</div>`;
+    html += `<p class="warmup-list">${d.warmup}${d.warmupNote ? ' — <em>' + d.warmupNote + '</em>' : ''}</p>`;
+
+    if (d.skill) {
+      html += `<div class="skill-row">
+        <div class="skill-stamp" style="background:${c.light}; color:${c.bg};">${d.skill.desc}</div>
+        <div><div class="skill-name">${d.skill.name}</div><div class="skill-desc">skill · fresco</div></div>
+      </div>`;
+    }
+
+    html += `<div class="block-label">Exercícios</div>`;
+    d.exercises.forEach((ex, idx) => {
+      html += `<div class="ex-card" data-idx="${idx}">
+        <div class="ex-head">
+          <div class="ex-name">${ex.name}</div>
+          <div class="ex-head-right">
+            ${ex.rir ? `<span class="ex-rir">${ex.rir}</span>` : ''}
+            <span class="ex-toggle">+</span>
+          </div>
+        </div>
+        <div class="ex-body"><div class="ex-body-inner"><b>${ex.role}</b>${ex.detail ? ' — ' + ex.detail : ''}</div></div>
+      </div>`;
+    });
+
+    html += `<div class="cooldown">${d.cooldown}</div>`;
+    html += `</div></div>`;
+
+    panel.innerHTML = html;
+    container.appendChild(panel);
+  });
+
+  document.querySelectorAll('.ex-card').forEach(card => {
+    card.querySelector('.ex-head').addEventListener('click', () => {
+      const isOpen = card.classList.contains('open');
+      card.classList.toggle('open', !isOpen);
+      card.querySelector('.ex-toggle').textContent = isOpen ? '+' : '×';
+    });
+  });
+}
+
+function buildAccordion() {
+  const container = document.getElementById('accordion');
+  accordionData.forEach((item) => {
+    const el = document.createElement('div');
+    el.className = 'accordion-item';
+    el.innerHTML = `
+      <div class="accordion-head">
+        <h3>${item.title}</h3>
+        <span class="accordion-plus">+</span>
+      </div>
+      <div class="accordion-body"><div class="accordion-body-inner">${item.body}</div></div>`;
+    el.querySelector('.accordion-head').addEventListener('click', () => {
+      const isOpen = el.classList.contains('open');
+      el.classList.toggle('open', !isOpen);
+      el.querySelector('.accordion-plus').textContent = isOpen ? '+' : '×';
+    });
+    container.appendChild(el);
+  });
+}
+
+function initPWA() {
+  const manifest = {
+    name: 'Protocolo Megumi',
+    short_name: 'Megumi',
+    description: 'Equilíbrio real — rotina de treino do Diego.',
+    start_url: '.',
+    display: 'standalone',
+    background_color: '#12131c',
+    theme_color: '#12131c',
+    orientation: 'portrait-primary',
+    icons: [
+      {
+        src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%2389b4fa'/%3E%3Cstop offset='1' stop-color='%23cba6f7'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='192' height='192' rx='50' fill='%2312131c'/%3E%3Ccircle cx='96' cy='96' r='54' fill='url(%23g)'/%3E%3C/svg%3E",
+        sizes: '192x192',
+        type: 'image/svg+xml'
+      },
+      {
+        src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='g2' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%2389b4fa'/%3E%3Cstop offset='1' stop-color='%23cba6f7'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' rx='130' fill='%2312131c'/%3E%3Ccircle cx='256' cy='256' r='144' fill='url(%23g2)'/%3E%3C/svg%3E",
+        sizes: '512x512',
+        type: 'image/svg+xml'
+      }
+    ]
+  };
+  const blob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
+  document.getElementById('manifestLink').setAttribute('href', URL.createObjectURL(blob));
+
+  if ('serviceWorker' in navigator) {
+    const swCode = `
+      self.addEventListener('install', e => self.skipWaiting());
+      self.addEventListener('activate', e => self.clients.claim());
+      self.addEventListener('fetch', e => {
+        e.respondWith(
+          caches.open('megumi-v2').then(cache =>
+            fetch(e.request).then(res => {
+              cache.put(e.request, res.clone());
+              return res;
+            }).catch(() => cache.match(e.request))
+          )
+        );
+      });
+    `;
+    const swBlob = new Blob([swCode], { type: 'application/javascript' });
+    navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(() => {});
+  }
+}
+
+function initTheme() {
+  document.getElementById('themeToggle').addEventListener('click', () => {
+    document.body.style.filter = document.body.style.filter ? '' : 'invert(1) hue-rotate(180deg)';
+  });
+}
+
+function initClock() {
+  const el = document.getElementById('clock');
+  function tick() {
+    const now = new Date();
+    el.textContent = String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+  }
+  tick();
+  setInterval(tick, 15000);
+}
+
+initPWA();
+initTheme();
+initClock();
+buildTabs();
+buildPanels();
+buildAccordion();
+
+const WEEKDAY_TO_ID = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sab'];
+const todayId = WEEKDAY_TO_ID[new Date().getDay()];
+if (days.find(d => d.id === todayId)) selectDay(todayId);
+</script>
+
+</body>
+</html>
