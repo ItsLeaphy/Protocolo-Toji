@@ -443,6 +443,60 @@ body::before {
 
 .reorder-toggle:hover, .reorder-reset:hover { color: var(--ink); }
 
+.quick-register-row {
+  display: flex;
+  justify-content: center;
+  margin-top: 14px;
+}
+
+.quick-register {
+  border: 1.5px solid var(--ink);
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.quick-register:hover { background: var(--ink); color: var(--bg); }
+.quick-register.active { background: var(--ink); color: var(--bg); }
+
+.progress-select {
+  width: 100%;
+  border: 1.5px solid var(--line-strong);
+  background: var(--bg-alt);
+  color: var(--ink);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  padding: 9px 10px;
+  margin-bottom: 16px;
+}
+
+.progress-empty {
+  font-size: 13px;
+  color: var(--ink-soft);
+  font-style: italic;
+}
+
+.progress-svg {
+  width: 100%;
+  height: auto;
+  border: 1.5px solid var(--line-strong);
+  background: var(--bg-alt);
+}
+
+.progress-current {
+  margin-top: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+.progress-current b { color: var(--ink); }
+
 
 .ex-head {
   display: flex;
@@ -459,6 +513,131 @@ body::before {
 .ex-name {
   font-weight: 600;
   font-size: 14.5px;
+}
+
+.done-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-1);
+  margin-left: 7px;
+  vertical-align: middle;
+}
+
+.done-check {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 12px;
+  font-size: 12px;
+  font-family: 'IBM Plex Mono', monospace;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  cursor: pointer;
+  user-select: none;
+}
+
+.done-check input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.done-check .box {
+  flex: 0 0 auto;
+  width: 15px;
+  height: 15px;
+  border: 1.5px solid var(--line-strong);
+  background: var(--bg-alt);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.done-check .box::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  background: var(--accent-1);
+  opacity: 0;
+  transform: scale(0.4);
+  transition: opacity 0.12s ease, transform 0.12s ease;
+}
+
+.done-check input:checked ~ .box {
+  border-color: var(--accent-1);
+}
+
+.done-check input:checked ~ .box::after {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.done-check:hover .box { border-color: var(--ink-soft); }
+
+.weight-track {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line-strong);
+}
+
+.weight-last {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11.5px;
+  color: var(--ink-soft);
+  margin-bottom: 8px;
+}
+
+.weight-last b { color: var(--ink); font-weight: 600; }
+
+.weight-form {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.weight-input {
+  width: 64px;
+  border: 1.5px solid var(--line-strong);
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  padding: 5px 7px;
+}
+
+.weight-type {
+  border: 1.5px solid var(--line-strong);
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  padding: 5px 6px;
+}
+
+.weight-save {
+  border: 1.5px solid var(--ink);
+  background: var(--ink);
+  color: var(--bg);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.weight-save:hover { opacity: 0.85; }
+
+.weight-saved-tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--accent-1);
+  margin-left: 4px;
 }
 
 .ex-head-right {
@@ -484,13 +663,16 @@ body::before {
 }
 
 .ex-body {
-  max-height: 0;
+  display: grid;
+  grid-template-rows: 0fr;
   overflow: hidden;
-  transition: max-height 0.18s ease;
+  transition: grid-template-rows 0.2s ease;
   background: var(--bg-alt);
 }
 
-.ex-card.open .ex-body { max-height: 200px; }
+.ex-body > .ex-body-inner { overflow: hidden; }
+
+.ex-card.open .ex-body { grid-template-rows: 1fr; }
 
 .ex-body-inner {
   padding: 0 14px 14px;
@@ -635,6 +817,11 @@ footer {
 
   <div id="panels"></div>
 
+  <section id="progressao" style="margin-top: 3rem;">
+    <h2 class="section-title">progressão</h2>
+    <div id="progressaoContent"></div>
+  </section>
+
   <section id="apendice" style="margin-top: 3rem;">
     <h2 class="section-title">apêndice: lógica do dia</h2>
     <div id="accordion"></div>
@@ -663,11 +850,11 @@ const days = [
     warmup: 'rotação torácica · wall slides · band pull-apart',
     skill: { name: 'Handstand', desc: 'PROGRESSÃO' },
     exercises: [
-      { name: 'Supino reto (barra livre)', rir: 'RIR 2', role: 'Composto principal', detail: 'Peito médio — o motor do dia.' },
-      { name: 'Desenvolvimento (halteres)', rir: 'RIR 1-2', role: 'Composto', detail: 'Ombro.' },
-      { name: 'Supino inclinado (halteres)', rir: 'RIR 1-2', role: 'Composto', detail: 'Peito superior.' },
-      { name: 'Elevação lateral (cabo)', rir: 'RIR 0-1', role: 'Isolador', detail: 'Deltoide lateral — prioridade máxima pro shape em V.' },
-      { name: 'Tríceps francês (halter, unilateral, overhead)', rir: 'RIR 0-1', role: 'Isolador', detail: 'Tríceps cabeça longa.' }
+      { name: 'Supino reto (barra livre)', rir: 'RIR 2', sets: '4x8', role: 'Composto principal', detail: 'Peito médio — o motor do dia.' },
+      { name: 'Desenvolvimento (halteres)', rir: 'RIR 1-2', sets: '3x8-10', role: 'Composto', detail: 'Ombro.' },
+      { name: 'Supino inclinado (halteres)', rir: 'RIR 1-2', sets: '3x10', role: 'Composto', detail: 'Peito superior.' },
+      { name: 'Elevação lateral (cabo)', rir: 'RIR 0-1', sets: '4x15', role: 'Isolador', detail: 'Deltoide lateral — prioridade máxima pro shape em V, por isso volume mais alto que um isolador comum.' },
+      { name: 'Tríceps francês (halter, unilateral, overhead)', rir: 'RIR 0-1', sets: '3x12', role: 'Isolador', detail: 'Tríceps cabeça longa.' }
     ],
     cooldown: 'Alongamento de peitoral e ombro anterior.',
     appendix: [
@@ -692,15 +879,15 @@ const days = [
     warmup: 'hip 90/90 · deep squat hold · ativação de glúteo',
     skill: { name: 'Pistol squat', desc: 'PROGRESSÃO' },
     exercises: [
-      { name: 'Agachamento livre', rir: 'RIR 2', role: 'Composto principal', detail: 'Quadríceps — motor do dia, RIR 2 porque sustenta o resto do treino.' },
-      { name: 'RDL (barra livre)', rir: 'RIR 1-2', role: 'Composto', detail: 'Posterior/lombar — resolve a lombar historicamente fraca junto com Hyperextension.' },
-      { name: 'Cadeira flexora (deitada)', rir: 'RIR 0-1', role: 'Isolador', detail: 'Posterior — isola o que o RDL não esgota sozinho.' },
-      { name: 'Cadeira extensora', rir: 'RIR 0-1', role: 'Isolador', detail: 'Quadríceps — finalização isolada, sem carga axial na coluna.' },
-      { name: 'Panturrilha em pé', rir: 'RIR 0-1', role: 'Isolador', detail: 'Gastrocnêmio — perna grande e volumosa também depende de panturrilha, não só de coxa.' },
-      { name: 'Cable crunch', rir: 'RIR 1', role: 'Core — reto abdominal', detail: 'Flexão de tronco carregada, academia.' },
-      { name: 'Prancha com sobrecarga', rir: 'RIR 1-2', role: 'Core — anti-extensão', detail: 'Estabilidade de tronco sob carga.' },
-      { name: 'Pallof press', rir: 'RIR 1', role: 'Core — anti-rotação', detail: 'Anti-rotação em vez de rotação carregada, que engrossaria a cintura.' },
-      { name: 'Hanging leg raise', rir: 'RIR 1', role: 'Core — flexores de quadril/reto inferior', detail: 'Usa a barra já aquecida no bloco de pull.' }
+      { name: 'Agachamento livre', rir: 'RIR 2', sets: '4x8', role: 'Composto principal', detail: 'Quadríceps — motor do dia, RIR 2 porque sustenta o resto do treino.' },
+      { name: 'RDL (barra livre)', rir: 'RIR 1-2', sets: '3x8-10', role: 'Composto', detail: 'Posterior/lombar — resolve a lombar historicamente fraca junto com Hyperextension.' },
+      { name: 'Cadeira flexora (deitada)', rir: 'RIR 0-1', sets: '3x12', role: 'Isolador', detail: 'Posterior — isola o que o RDL não esgota sozinho.' },
+      { name: 'Cadeira extensora', rir: 'RIR 0-1', sets: '3x12-15', role: 'Isolador', detail: 'Quadríceps — finalização isolada, sem carga axial na coluna.' },
+      { name: 'Panturrilha em pé', rir: 'RIR 0-1', sets: '4x15-20', role: 'Isolador', detail: 'Gastrocnêmio — perna grande e volumosa também depende de panturrilha, não só de coxa. Volume alto porque panturrilha responde melhor a repetição frequente que a carga isolada.' },
+      { name: 'Cable crunch', rir: 'RIR 1', sets: '3x15', role: 'Core — reto abdominal', detail: 'Flexão de tronco carregada, academia.' },
+      { name: 'Prancha com sobrecarga', rir: 'RIR 1-2', sets: '3x30-45s', role: 'Core — anti-extensão', detail: 'Estabilidade de tronco sob carga.' },
+      { name: 'Pallof press', rir: 'RIR 1', sets: '3x12 (cada lado)', role: 'Core — anti-rotação', detail: 'Anti-rotação em vez de rotação carregada, que engrossaria a cintura.' },
+      { name: 'Hanging leg raise', rir: 'RIR 1', sets: '3x12', role: 'Core — flexores de quadril/reto inferior', detail: 'Usa a barra já aquecida no bloco de pull.' }
     ],
     cooldown: 'Alongamento de posterior, quadríceps e flexor de quadril (flexor curto = causa comum de anteversão pélvica e dor lombar ao andar).',
     appendix: [
@@ -726,14 +913,14 @@ const days = [
     warmupNote: 'correção postural — ombro pra frente, tensão',
     skill: { name: 'Front lever', desc: 'PROGRESSÃO' },
     exercises: [
-      { name: 'Barra fixa', rir: 'RIR 2', role: 'Composto — força/largura', detail: 'Pronada — não varia entre os dias, força ganha mais com especificidade de movimento repetido.' },
-      { name: 'Puxada aberta (pegada larga)', rir: 'RIR 1-2', role: 'Composto — largura', detail: 'Puxador anatômico largo.' },
-      { name: 'Remada curvada (pronada)', rir: 'RIR 1-2', role: 'Composto — espessura', detail: 'Pronada.' },
-      { name: 'Encolhimento', rir: 'RIR 0-1', role: 'Isolador — trapézio', detail: 'Trapézio superior — sustentação de carga e presença de ombro.' },
-      { name: 'Rosca inclinada (supinada)', rir: 'RIR 0-1', role: 'Isolador — bíceps (pico)', detail: 'Banco inclinado alonga o bíceps na origem — trabalha o pico que a rosca reta não pega.' },
-      { name: 'Rosca Scott', rir: 'RIR 0-1', role: 'Isolador — bíceps (curta)', detail: 'Cabeça curta do bíceps, isolada do resto do corpo pelo apoio.' },
-      { name: 'Rosca martelo', rir: 'RIR 0-1', role: 'Isolador — braquial/antebraço', detail: 'Pegada neutra — recruta braquial e braquiorradial, dá espessura de braço vista de lado.' },
-      { name: 'Rosca de punho', rir: 'RIR 0-1', role: 'Isolador — antebraço', detail: 'Antebraço e grip — parte do objetivo de pegada forte, junto com dead hangs e farmer carries.' }
+      { name: 'Barra fixa', rir: 'RIR 2', sets: '4x8', role: 'Composto — força/largura', detail: 'Pronada — não varia entre os dias, força ganha mais com especificidade de movimento repetido.' },
+      { name: 'Puxada aberta (pegada larga)', rir: 'RIR 1-2', sets: '3x10', role: 'Composto — largura', detail: 'Puxador anatômico largo.' },
+      { name: 'Remada curvada (pronada)', rir: 'RIR 1-2', sets: '3x8-10', role: 'Composto — espessura', detail: 'Pronada.' },
+      { name: 'Encolhimento', rir: 'RIR 0-1', sets: '3x15', role: 'Isolador — trapézio', detail: 'Trapézio superior — sustentação de carga e presença de ombro.' },
+      { name: 'Rosca inclinada (supinada)', rir: 'RIR 0-1', sets: '3x12', role: 'Isolador — bíceps (pico)', detail: 'Banco inclinado alonga o bíceps na origem — trabalha o pico que a rosca reta não pega.' },
+      { name: 'Rosca Scott', rir: 'RIR 0-1', sets: '3x12', role: 'Isolador — bíceps (curta)', detail: 'Cabeça curta do bíceps, isolada do resto do corpo pelo apoio.' },
+      { name: 'Rosca martelo', rir: 'RIR 0-1', sets: '3x12', role: 'Isolador — braquial/antebraço', detail: 'Pegada neutra — recruta braquial e braquiorradial, dá espessura de braço vista de lado.' },
+      { name: 'Rosca de punho', rir: 'RIR 0-1', sets: '3x15-20', role: 'Isolador — antebraço', detail: 'Antebraço e grip — parte do objetivo de pegada forte, junto com dead hangs e farmer carries. Volume alto porque antebraço responde melhor a repetição.' }
     ],
     cooldown: 'Alongamento de dorsais · Neck curl/extension.',
     appendix: [
@@ -762,17 +949,17 @@ const days = [
     warmup: 'rotação torácica · wall slides · band pull-apart',
     skill: { name: 'Handstand', desc: 'PROGRESSÃO' },
     exercises: [
-      { name: 'Supino declinado', rir: 'RIR 1-2', role: 'Composto', detail: 'Peito inferior — baixa prioridade.' },
-      { name: 'Crucifixo (cabo/peck-deck)', rir: 'RIR 0-1', role: 'Isolador', detail: 'Peito, alongamento.' },
-      { name: 'Crossover', rir: 'RIR 0-1', role: 'Isolador', detail: 'Peito, contração.' },
-      { name: 'Face pull', rir: 'RIR 1', role: 'Isolador', detail: 'Deltoide posterior/postura.' },
-      { name: 'Tríceps corda', rir: 'RIR 0-1', role: 'Isolador', detail: 'Tríceps cabeça lateral.' }
+      { name: 'Chest press (máquina)', rir: 'RIR 1-2', sets: '4x8-10', role: 'Composto', detail: 'Peito inferior — ajusta o assento/ângulo pra baixo se a máquina permitir, senão fica em peito médio-inferior.' },
+      { name: 'Crucifixo (cabo/peck-deck)', rir: 'RIR 0-1', sets: '3x12', role: 'Isolador', detail: 'Peito, alongamento.' },
+      { name: 'Crossover', rir: 'RIR 0-1', sets: '3x12-15', role: 'Isolador', detail: 'Peito, contração.' },
+      { name: 'Face pull', rir: 'RIR 1', sets: '3x15', role: 'Isolador', detail: 'Deltoide posterior/postura.' },
+      { name: 'Tríceps corda', rir: 'RIR 0-1', sets: '3x12', role: 'Isolador', detail: 'Tríceps cabeça lateral.' }
     ],
     cooldown: 'Alongamento de peitoral e ombro anterior.',
     appendix: [
       {
         title: 'Por que Push B é assim',
-        body: 'Segunda metade do push semanal — foco em ângulos que a Segunda não cobriu: peito inferior (declinado) e contração (crucifixo/crossover), em vez de repetir os mesmos ângulos. Face pull entra aqui, não na Segunda, especificamente pra contrabalançar o volume de peito acumulado na semana com trabalho de deltoide posterior/postura.'
+        body: 'Segunda metade do push semanal — foco em ângulos que a Segunda não cobriu: peito inferior (chest press, ajustando o ângulo do assento quando a máquina permite) e contração (crucifixo/crossover), em vez de repetir os mesmos ângulos. Face pull entra aqui, não na Segunda, especificamente pra contrabalançar o volume de peito acumulado na semana com trabalho de deltoide posterior/postura.'
       },
       {
         title: 'Postura e respiração',
@@ -780,7 +967,7 @@ const days = [
       },
       {
         title: 'Execução completa',
-        body: '<b>Supino declinado:</b> banco inclinado pra baixo (~15-30°), barra desce até a parte inferior do peito. Peito inferior — ângulo que Segunda não cobre.<br><br><b>Crucifixo (cabo/peck-deck):</b> braços abertos em arco, foco em alongar e depois "abraçar" no fechamento. Isolador de peito com ênfase em alongamento.<br><br><b>Crossover:</b> polias altas, cabos cruzam na frente do corpo em diagonal descendente. Contração de peito no ponto final do movimento.<br><br><b>Face pull:</b> corda na polia alta, puxa em direção ao rosto separando as mãos no final, cotovelos altos. Deltoide posterior e rotadores externos — postura.<br><br><b>Tríceps corda:</b> polia alta, corda desce e as mãos se separam no final do movimento. Cabeça lateral do tríceps.'
+        body: '<b>Chest press (máquina):</b> sentado, empurra os punhos/alças à frente até quase estender o cotovelo sem travar. Se o assento/encosto tiver ajuste de ângulo, deixa levemente pra baixo pra enfatizar peito inferior — senão cobre peito médio-inferior mesmo assim. Composto, mais seguro que barra livre pra treinar perto da falha sozinho.<br><br><b>Crucifixo (cabo/peck-deck):</b> braços abertos em arco, foco em alongar e depois "abraçar" no fechamento. Isolador de peito com ênfase em alongamento.<br><br><b>Crossover:</b> polias altas, cabos cruzam na frente do corpo em diagonal descendente. Contração de peito no ponto final do movimento.<br><br><b>Face pull:</b> corda na polia alta, puxa em direção ao rosto separando as mãos no final, cotovelos altos. Deltoide posterior e rotadores externos — postura.<br><br><b>Tríceps corda:</b> polia alta, corda desce e as mãos se separam no final do movimento. Cabeça lateral do tríceps.'
       }
     ]
   },
@@ -791,16 +978,16 @@ const days = [
     warmup: 'hip 90/90 · deep squat hold · ativação de glúteo',
     skill: { name: 'Agilidade', desc: 'SALTOS LATERAIS' },
     exercises: [
-      { name: 'Leg press (pé baixo/médio)', rir: 'RIR 1-2', role: 'Composto', detail: 'Quadríceps.' },
-      { name: 'Hip thrust (barra livre)', rir: 'RIR 1-2', role: 'Composto', detail: 'Glúteo.' },
-      { name: 'Cadeira abdutora', rir: 'RIR 0-1', role: 'Isolador', detail: 'Estabilidade de quadril.' },
-      { name: 'Búlgaro (halteres)', rir: 'RIR 1-2', role: 'Unilateral', detail: 'Controle/agilidade.' },
-      { name: 'Hyperextension (banco 45°)', rir: 'RIR 0-1', role: 'Isolador', detail: 'Lombar, ângulo seguro.' },
-      { name: 'Panturrilha sentado', rir: 'RIR 0-1', role: 'Isolador', detail: 'Sóleo.' },
-      { name: 'Crucifix crunch', rir: 'RIR 1', role: 'Core — reto abdominal (calistenia)', detail: 'Variante de peso corporal — segundo ângulo de reto abdominal na semana.' },
-      { name: 'Dragon flag progressão', rir: '—', role: 'Core — cadeia completa', detail: 'Reto abdominal + estabilizadores profundos, progressão de nível.' },
-      { name: 'Shoulder taps em prancha', rir: '—', role: 'Core — anti-rotação (calistenia)', detail: 'Estabilidade de ombro/tronco sob instabilidade.' },
-      { name: 'Hanging leg raise', rir: 'RIR 1', role: 'Core — flexores de quadril/reto inferior', detail: 'Segundo estímulo de flexão de quadril na semana.' }
+      { name: 'Leg press (pé baixo/médio)', rir: 'RIR 1-2', sets: '4x8-10', role: 'Composto', detail: 'Quadríceps.' },
+      { name: 'Hip thrust (barra livre)', rir: 'RIR 1-2', sets: '4x8-10', role: 'Composto', detail: 'Glúteo.' },
+      { name: 'Cadeira abdutora', rir: 'RIR 0-1', sets: '3x15', role: 'Isolador', detail: 'Estabilidade de quadril.' },
+      { name: 'Búlgaro (halteres)', rir: 'RIR 1-2', sets: '3x10 (cada perna)', role: 'Unilateral', detail: 'Controle/agilidade.' },
+      { name: 'Hyperextension (banco 45°)', rir: 'RIR 0-1', sets: '3x12-15', role: 'Isolador', detail: 'Lombar, ângulo seguro.' },
+      { name: 'Panturrilha sentado', rir: 'RIR 0-1', sets: '4x15-20', role: 'Isolador', detail: 'Sóleo.' },
+      { name: 'Crucifix crunch', rir: 'RIR 1', sets: '3x15', role: 'Core — reto abdominal (calistenia)', detail: 'Variante de peso corporal — segundo ângulo de reto abdominal na semana.' },
+      { name: 'Dragon flag progressão', rir: '—', sets: '3x6-8 ou progressão', role: 'Core — cadeia completa', detail: 'Reto abdominal + estabilizadores profundos, progressão de nível.' },
+      { name: 'Shoulder taps em prancha', rir: '—', sets: '3x20 toques', role: 'Core — anti-rotação (calistenia)', detail: 'Estabilidade de ombro/tronco sob instabilidade.' },
+      { name: 'Hanging leg raise', rir: 'RIR 1', sets: '3x12', role: 'Core — flexores de quadril/reto inferior', detail: 'Segundo estímulo de flexão de quadril na semana.' }
     ],
     cooldown: 'Alongamento de posterior, quadríceps e flexor de quadril.',
     appendix: [
@@ -825,14 +1012,14 @@ const days = [
     warmup: 'dead hang · scapular pull-ups · shoulder dislocates · extensão torácica no banco',
     skill: { name: 'Front lever', desc: 'PROGRESSÃO' },
     exercises: [
-      { name: 'Barra fixa', rir: 'RIR 2', role: 'Composto — força/largura', detail: 'Pronada — não varia entre os dias, força ganha mais com especificidade de movimento repetido.' },
-      { name: 'Puxada aberta (triângulo/neutro)', rir: 'RIR 1-2', role: 'Composto — largura', detail: 'Ângulo diferente da quarta pro mesmo grupo.' },
-      { name: 'Remada curvada (supinada)', rir: 'RIR 1-2', role: 'Composto — espessura', detail: 'Recruta mais bíceps junto, complementa a pronada de quarta.' },
-      { name: 'Encolhimento', rir: 'RIR 0-1', role: 'Isolador — trapézio', detail: 'Trapézio superior — sustentação de carga e presença de ombro.' },
-      { name: 'Rosca inclinada (supinada)', rir: 'RIR 0-1', role: 'Isolador — bíceps (pico)', detail: 'Banco inclinado alonga o bíceps na origem — trabalha o pico.' },
-      { name: 'Spider curl', rir: 'RIR 0-1', role: 'Isolador — bíceps (curta)', detail: 'Mesma função da quarta (cabeça curta do bíceps), ângulo levemente diferente.' },
-      { name: 'Rosca martelo', rir: 'RIR 0-1', role: 'Isolador — braquial/antebraço', detail: 'Pegada neutra — braquial e braquiorradial, espessura de braço vista de lado.' },
-      { name: 'Rosca de punho', rir: 'RIR 0-1', role: 'Isolador — antebraço', detail: 'Antebraço e grip.' }
+      { name: 'Barra fixa', rir: 'RIR 2', sets: '4x8', role: 'Composto — força/largura', detail: 'Pronada — não varia entre os dias, força ganha mais com especificidade de movimento repetido.' },
+      { name: 'Puxada aberta (triângulo/neutro)', rir: 'RIR 1-2', sets: '3x10', role: 'Composto — largura', detail: 'Ângulo diferente da quarta pro mesmo grupo.' },
+      { name: 'Remada curvada (supinada)', rir: 'RIR 1-2', sets: '3x8-10', role: 'Composto — espessura', detail: 'Recruta mais bíceps junto, complementa a pronada de quarta.' },
+      { name: 'Encolhimento', rir: 'RIR 0-1', sets: '3x15', role: 'Isolador — trapézio', detail: 'Trapézio superior — sustentação de carga e presença de ombro.' },
+      { name: 'Rosca inclinada (supinada)', rir: 'RIR 0-1', sets: '3x12', role: 'Isolador — bíceps (pico)', detail: 'Banco inclinado alonga o bíceps na origem — trabalha o pico.' },
+      { name: 'Spider curl', rir: 'RIR 0-1', sets: '3x12', role: 'Isolador — bíceps (curta)', detail: 'Mesma função da quarta (cabeça curta do bíceps), ângulo levemente diferente.' },
+      { name: 'Rosca martelo', rir: 'RIR 0-1', sets: '3x12', role: 'Isolador — braquial/antebraço', detail: 'Pegada neutra — braquial e braquiorradial, espessura de braço vista de lado.' },
+      { name: 'Rosca de punho', rir: 'RIR 0-1', sets: '3x15-20', role: 'Isolador — antebraço', detail: 'Antebraço e grip.' }
     ],
     cooldown: 'Alongamento de dorsais · Neck curl/extension. Ciclismo 32km recruta quadríceps/glúteo — por isso o dia não é Legs.',
     appendix: [
@@ -940,6 +1127,66 @@ function clearOrder(dayId) {
   try { localStorage.removeItem('ordem-' + dayId); } catch (e) {}
 }
 
+// --- Completude semanal (reseta sozinho ao virar a semana ISO) ---
+function getWeekKey(date) {
+  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  const dayNum = d.getUTCDay() || 7;
+  d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+  const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+  return d.getUTCFullYear() + '-S' + weekNo;
+}
+
+function getCompletion(dayId) {
+  const key = 'progresso-' + getWeekKey(new Date());
+  let all = {};
+  try { all = JSON.parse(localStorage.getItem(key)) || {}; } catch (e) {}
+  return all[dayId] || {};
+}
+
+function toggleCompletion(dayId, exIdx) {
+  const key = 'progresso-' + getWeekKey(new Date());
+  let all = {};
+  try { all = JSON.parse(localStorage.getItem(key)) || {}; } catch (e) {}
+  if (!all[dayId]) all[dayId] = {};
+  all[dayId][exIdx] = !all[dayId][exIdx];
+  try { localStorage.setItem(key, JSON.stringify(all)); } catch (e) {}
+  return all[dayId][exIdx];
+}
+
+// --- Histórico de peso (append-only por exercício) ---
+function historyKey(dayId, exIdx) {
+  return 'historico-' + dayId + '-' + exIdx;
+}
+
+function getHistory(dayId, exIdx) {
+  let arr = [];
+  try { arr = JSON.parse(localStorage.getItem(historyKey(dayId, exIdx))) || []; } catch (e) {}
+  return Array.isArray(arr) ? arr : [];
+}
+
+function getLastEntry(dayId, exIdx) {
+  const hist = getHistory(dayId, exIdx);
+  return hist.length ? hist[hist.length - 1] : null;
+}
+
+function addHistoryEntry(dayId, exIdx, valor, tipo) {
+  const hist = getHistory(dayId, exIdx);
+  const todayStr = new Date().toISOString().slice(0, 10);
+  // Se já existe um registro de hoje pro mesmo exercício, substitui em vez de duplicar
+  if (hist.length && hist[hist.length - 1].data === todayStr) {
+    hist[hist.length - 1] = { data: todayStr, valor, tipo };
+  } else {
+    hist.push({ data: todayStr, valor, tipo });
+  }
+  try { localStorage.setItem(historyKey(dayId, exIdx), JSON.stringify(hist)); } catch (e) {}
+}
+
+function formatWeight(entry) {
+  if (!entry) return null;
+  return entry.tipo === 'lado' ? entry.valor + ' kg por lado' : entry.valor + ' kg';
+}
+
 function buildPanels(activeId) {
   const container = document.getElementById('panels');
   const currentActive = activeId || document.querySelector('.day-panel.active')?.dataset.id || (days[0] && days[0].id);
@@ -978,8 +1225,10 @@ function buildPanels(activeId) {
 
     html += `<div class="block-label">exercícios</div>`;
     const order = getOrder(d.id, d.exercises.length);
+    const completion = getCompletion(d.id);
     order.forEach((realIdx, pos) => {
       const ex = d.exercises[realIdx];
+      const done = !!completion[realIdx];
       html += `<div class="ex-card" data-idx="${realIdx}">
         <div class="reorder-arrows">
           <button type="button" class="arrow-btn" data-dir="up" ${pos === 0 ? 'disabled' : ''} aria-label="Mover para cima">↑</button>
@@ -987,16 +1236,28 @@ function buildPanels(activeId) {
         </div>
         <div class="ex-card-main">
         <div class="ex-head">
-          <div class="ex-name">${ex.name}</div>
+          <div class="ex-name">${ex.name}${done ? '<span class="done-dot" aria-label="Feito esta semana"></span>' : ''}</div>
           <div class="ex-head-right">
-            ${ex.rir ? `<span class="ex-rir">${ex.rir}</span>` : ''}
+            ${ex.sets || ex.rir ? `<span class="ex-rir">${[ex.sets, ex.rir].filter(Boolean).join(' / ')}</span>` : ''}
             <span class="ex-toggle">+</span>
           </div>
         </div>
-        <div class="ex-body"><div class="ex-body-inner"><b>${ex.role}</b>${ex.detail ? ' — ' + ex.detail : ''}</div></div>
+        <div class="ex-body"><div class="ex-body-inner">
+          <b>${ex.role}</b>${ex.detail ? ' — ' + ex.detail : ''}
+          <label class="done-check">
+            <input type="checkbox" class="done-checkbox" data-day="${d.id}" data-idx="${realIdx}" ${done ? 'checked' : ''}>
+            <span class="box"></span>
+            <span>feito essa semana</span>
+          </label>
+          <div class="weight-track" data-day="${d.id}" data-idx="${realIdx}"></div>
+        </div></div>
         </div>
       </div>`;
     });
+
+    html += `<div class="quick-register-row">
+      <button type="button" class="quick-register" data-day="${d.id}">registro rápido ⌄</button>
+    </div>`;
 
     html += `<div class="reorder-toggle-row">
       <button type="button" class="reorder-toggle" data-day="${d.id}">reordenar ⇅</button>
@@ -1049,6 +1310,152 @@ function buildPanels(activeId) {
       document.querySelector(`.day-panel[data-id="${dayId}"]`)?.classList.add('reorder-active');
     });
   });
+  document.querySelectorAll('.done-checkbox').forEach(box => {
+    box.addEventListener('change', () => {
+      const dayId = box.dataset.day;
+      const exIdx = parseInt(box.dataset.idx, 10);
+      const nowDone = toggleCompletion(dayId, exIdx);
+      const nameEl = box.closest('.ex-card').querySelector('.ex-name');
+      let dot = nameEl.querySelector('.done-dot');
+      if (nowDone && !dot) {
+        dot = document.createElement('span');
+        dot.className = 'done-dot';
+        dot.setAttribute('aria-label', 'Feito esta semana');
+        nameEl.appendChild(dot);
+      } else if (!nowDone && dot) {
+        dot.remove();
+      }
+    });
+  });
+
+  document.querySelectorAll('.weight-track').forEach(el => renderWeightTrack(el));
+
+  document.querySelectorAll('.quick-register').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const panel = btn.closest('.day-panel');
+      const cards = panel.querySelectorAll('.ex-card');
+      const willOpen = !panel.classList.contains('all-open');
+      cards.forEach(card => {
+        card.classList.toggle('open', willOpen);
+        card.querySelector('.ex-toggle').textContent = willOpen ? '×' : '+';
+      });
+      panel.classList.toggle('all-open', willOpen);
+      btn.classList.toggle('active', willOpen);
+      btn.textContent = willOpen ? 'fechar registro ⌃' : 'registro rápido ⌄';
+    });
+  });
+}
+
+function renderWeightTrack(el) {
+  const dayId = el.dataset.day;
+  const exIdx = parseInt(el.dataset.idx, 10);
+  const last = getLastEntry(dayId, exIdx);
+  const lastLabel = formatWeight(last);
+  const defaultTipo = last ? last.tipo : 'total';
+
+  el.innerHTML = `
+    ${lastLabel ? `<div class="weight-last">última vez: <b>${lastLabel}</b> (${last.data.split('-').reverse().join('/')})</div>` : `<div class="weight-last">ainda sem registro</div>`}
+    <div class="weight-form">
+      <input type="number" step="0.5" min="0" class="weight-input" placeholder="peso" value="${last ? last.valor : ''}">
+      <select class="weight-type">
+        <option value="total" ${defaultTipo === 'total' ? 'selected' : ''}>total</option>
+        <option value="lado" ${defaultTipo === 'lado' ? 'selected' : ''}>por lado</option>
+      </select>
+      <button type="button" class="weight-save">salvar</button>
+      <span class="weight-saved-tag" style="display:none;">salvo ✓</span>
+    </div>`;
+
+  const input = el.querySelector('.weight-input');
+  const select = el.querySelector('.weight-type');
+  const btn = el.querySelector('.weight-save');
+  const tag = el.querySelector('.weight-saved-tag');
+  const lastLine = el.querySelector('.weight-last');
+
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const valor = parseFloat(input.value);
+    if (!valor && valor !== 0) return;
+    const tipo = select.value;
+    addHistoryEntry(dayId, exIdx, valor, tipo);
+    const novo = getLastEntry(dayId, exIdx);
+    lastLine.innerHTML = `última vez: <b>${formatWeight(novo)}</b> (${novo.data.split('-').reverse().join('/')})`;
+    tag.style.display = 'inline';
+    setTimeout(() => { tag.style.display = 'none'; }, 1800);
+    buildProgressao();
+  });
+
+  [input, select].forEach(field => field.addEventListener('click', e => e.stopPropagation()));
+}
+
+function buildProgressao() {
+  const container = document.getElementById('progressaoContent');
+
+  // Monta a lista de exercícios que já têm pelo menos 1 registro
+  const options = [];
+  days.forEach(d => {
+    if (d.rest) return;
+    d.exercises.forEach((ex, idx) => {
+      const hist = getHistory(d.id, idx);
+      if (hist.length > 0) {
+        options.push({ dayId: d.id, dayLabel: d.title, idx, name: ex.name, hist });
+      }
+    });
+  });
+
+  if (options.length === 0) {
+    container.innerHTML = `<p class="progress-empty">Nenhum registro de peso ainda. Registre um peso em qualquer exercício pra começar a ver a progressão aqui.</p>`;
+    return;
+  }
+
+  const selectId = 'progressaoSelect';
+  let html = `<select id="${selectId}" class="progress-select">`;
+  options.forEach((o, i) => {
+    html += `<option value="${i}">${o.dayLabel} — ${o.name}</option>`;
+  });
+  html += `</select><div id="progressaoChart"></div>`;
+  container.innerHTML = html;
+
+  const select = document.getElementById(selectId);
+  const draw = () => renderProgressChart(options[parseInt(select.value, 10)]);
+  select.addEventListener('change', draw);
+  draw();
+}
+
+function renderProgressChart(opt) {
+  const chartEl = document.getElementById('progressaoChart');
+  const hist = opt.hist;
+
+  if (hist.length === 1) {
+    chartEl.innerHTML = `<p class="progress-empty">Só tem 1 registro (${formatWeight(hist[0])}, ${hist[0].data.split('-').reverse().join('/')}) — precisa de pelo menos 2 pra desenhar progressão.</p>`;
+    return;
+  }
+
+  const W = 600, H = 220, padL = 40, padR = 16, padT = 16, padB = 30;
+  const valores = hist.map(h => h.valor);
+  const min = Math.min(...valores), max = Math.max(...valores);
+  const range = (max - min) || 1;
+  const yFor = v => padT + (H - padT - padB) * (1 - (v - min) / range);
+  const xFor = i => padL + (W - padL - padR) * (hist.length === 1 ? 0.5 : i / (hist.length - 1));
+
+  const points = hist.map((h, i) => `${xFor(i)},${yFor(h.valor)}`).join(' ');
+  const dots = hist.map((h, i) => `<circle cx="${xFor(i)}" cy="${yFor(h.valor)}" r="3.5" fill="var(--accent-1)" />`).join('');
+  const labels = hist.map((h, i) => {
+    if (hist.length > 8 && i % Math.ceil(hist.length / 8) !== 0 && i !== hist.length - 1) return '';
+    const d = h.data.split('-');
+    return `<text x="${xFor(i)}" y="${H - 8}" font-size="9" fill="var(--ink-soft)" text-anchor="middle">${d[2]}/${d[1]}</text>`;
+  }).join('');
+
+  chartEl.innerHTML = `
+    <svg viewBox="0 0 ${W} ${H}" class="progress-svg">
+      <line x1="${padL}" y1="${padT}" x2="${padL}" y2="${H - padB}" stroke="var(--line-strong)" stroke-width="1" />
+      <line x1="${padL}" y1="${H - padB}" x2="${W - padR}" y2="${H - padB}" stroke="var(--line-strong)" stroke-width="1" />
+      <text x="${padL - 6}" y="${yFor(max) + 4}" font-size="10" fill="var(--ink-soft)" text-anchor="end">${max}</text>
+      <text x="${padL - 6}" y="${yFor(min) + 4}" font-size="10" fill="var(--ink-soft)" text-anchor="end">${min}</text>
+      <polyline points="${points}" fill="none" stroke="var(--accent-1)" stroke-width="2" />
+      ${dots}
+      ${labels}
+    </svg>
+    <div class="progress-current">atual: <b>${formatWeight(hist[hist.length - 1])}</b> · ${hist.length} registros</div>`;
 }
 
 function buildAccordion(dayId) {
@@ -1153,6 +1560,7 @@ buildPanels();
 const todayId = initTodayTape();
 const startId = days.find(d => d.id === todayId) ? todayId : days[0].id;
 buildAccordion(startId);
+buildProgressao();
 selectDay(startId);
 </script>
 
