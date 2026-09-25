@@ -670,15 +670,25 @@ body::before {
   background: var(--bg-alt);
 }
 
-.ex-body > .ex-body-inner { overflow: hidden; }
+.ex-body > .ex-body-inner {
+  overflow: hidden;
+  min-height: 0;
+}
 
 .ex-card.open .ex-body { grid-template-rows: 1fr; }
 
 .ex-body-inner {
-  padding: 0 14px 14px;
+  padding: 0 14px;
+  max-height: 0;
+  transition: padding 0.2s ease;
   font-size: 13px;
   color: var(--ink-soft);
   line-height: 1.6;
+}
+
+.ex-card.open .ex-body-inner {
+  padding: 0 14px 14px;
+  max-height: none;
 }
 
 .ex-body-inner b { color: var(--ink); font-weight: 600; }
@@ -739,15 +749,23 @@ body::before {
   transition: grid-template-rows 0.25s ease;
 }
 
-.accordion-body > .accordion-body-inner { overflow: hidden; }
+.accordion-body > .accordion-body-inner {
+  overflow: hidden;
+  min-height: 0;
+}
 
 .accordion-item.open .accordion-body { grid-template-rows: 1fr; }
 
 .accordion-body-inner {
-  padding: 0 4px 18px;
+  padding: 0 4px;
+  transition: padding 0.25s ease;
   font-size: 14px;
   color: var(--ink-soft);
   line-height: 1.75;
+}
+
+.accordion-item.open .accordion-body-inner {
+  padding: 0 4px 18px;
 }
 
 .accordion-body-inner b { color: var(--ink); font-weight: 600; }
